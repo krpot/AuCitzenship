@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AuCitizenship</string>
+    <string name="menu_settings">Settings</string>
+    
+    <!-- Main Activity -->
+    <string name="review">Review</string>
+    <string name="repeat">Repeat</string>
+    <string name="test">Test</string>
+    <string name="misc">Misc</string>
+    <string name="practice">Practice</string>
+    
+    <!-- Practice Activity -->
+    <string name="before">Before</string>
+    <string name="next">Next</string>
+
+</resources>

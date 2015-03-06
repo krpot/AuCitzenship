@@ -1,8 +1,5 @@
 package com.spark.app.ocb;
 
-import java.sql.SQLException;
-import java.util.List;
-
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +10,9 @@ import com.spark.app.ocb.adpter.QuestionAdapter;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.SysUtils;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class TestActivity extends ListActivity {
 	
@@ -55,7 +55,7 @@ public class TestActivity extends ListActivity {
 			questions = mQDao.queryForAll();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			SysUtils.toast(this, "Load data error.");
+			SysUtils.toast("Load data error.");
 		}
 		
 		if (questions == null) return;

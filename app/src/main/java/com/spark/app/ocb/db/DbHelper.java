@@ -1,7 +1,5 @@
 package com.spark.app.ocb.db;
 
-import java.sql.SQLException;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -11,6 +9,8 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.spark.app.ocb.entity.Question;
+
+import java.sql.SQLException;
 
 /**
  * Database helper class used to manage the creation and upgrading of your database. This class also usually provides

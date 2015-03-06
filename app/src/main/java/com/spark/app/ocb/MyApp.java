@@ -1,9 +1,10 @@
 package com.spark.app.ocb;
 
-import com.spark.app.ocb.util.BeanUtils;
-
 import android.app.Application;
 import android.util.Log;
+
+import com.spark.app.ocb.util.BeanUtils;
+import com.spark.app.ocb.util.SysUtils;
 
 public class MyApp extends Application {
 
@@ -17,8 +18,11 @@ public class MyApp extends Application {
 		
 		//This should be first
 		MyApp.app = this;
-		
-		Log.i(TAG, "============ onCreate()");
+
+        BeanUtils.context = this;
+        SysUtils.context = this;
+
+        Log.i(TAG, "============ onCreate()");
 	}
 
 	@Override

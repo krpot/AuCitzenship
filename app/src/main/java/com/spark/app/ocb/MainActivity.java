@@ -1,12 +1,5 @@
 package com.spark.app.ocb;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-
-import org.json.JSONException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -20,6 +13,13 @@ import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.FileUtils;
 import com.spark.app.ocb.util.SysUtils;
+
+import org.json.JSONException;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 public class MainActivity extends Activity {
 	
@@ -82,13 +82,13 @@ public class MainActivity extends Activity {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			SysUtils.alert(this, "Load Data Error(DB)", e.getMessage());
+			SysUtils.alert("Load Data Error(DB)", e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			SysUtils.alert(this, "Load Data Error(IO)", e.getMessage());
+			SysUtils.alert("Load Data Error(IO)", e.getMessage());
 		} catch (JSONException e) {
 			e.printStackTrace();
-			SysUtils.alert(this, "Load Data Error(JSON)", e.getMessage());
+			SysUtils.alert("Load Data Error(JSON)", e.getMessage());
 		} finally {
 			if (in!=null) try {	in.close();	} catch (Exception e) {}
 		}

@@ -1,7 +1,5 @@
 package com.spark.app.ocb.adpter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +10,8 @@ import android.widget.TextView;
 
 import com.spark.app.ocb.R;
 import com.spark.app.ocb.entity.Question;
+
+import java.util.List;
 
 public class QuestionAdapter extends ArrayAdapter<Question> {
 

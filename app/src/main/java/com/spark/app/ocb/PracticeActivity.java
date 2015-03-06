@@ -1,10 +1,5 @@
 package com.spark.app.ocb;
 
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +12,11 @@ import com.j256.ormlite.dao.Dao;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.SysUtils;
+
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 public class PracticeActivity extends Activity {
 	
@@ -53,7 +53,7 @@ public class PracticeActivity extends Activity {
 	 */
 	public void btnBeforeClick(View view){
 		if (mCurrentNo<=1){
-			SysUtils.toast(this, "Begining of the questions.");
+			SysUtils.toast("Begining of the questions.");
 			return;
 		}
 		
@@ -67,7 +67,7 @@ public class PracticeActivity extends Activity {
 	 */
 	public void btnNextClick(View view){
 		if (mCurrentNo>=20){
-			SysUtils.toast(this, "End of the questions.");
+			SysUtils.toast("End of the questions.");
 			return;
 		}
 		
@@ -104,7 +104,7 @@ public class PracticeActivity extends Activity {
 			question = mQDao.queryForId(mQuestoinId);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			SysUtils.toast(this, "Load data error.");
+			SysUtils.toast("Load data error.");
 		}
 		
 		if (question == null) return;

@@ -1,14 +1,14 @@
 package com.spark.app.ocb.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author sunghun

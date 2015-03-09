@@ -1,0 +1,202 @@
+[
+{
+	"id": 31,
+    "statement": "In the citizenship pledge, who do pledge your loyalty to?",
+    "answers": [
+        { "answer": "The Commonwealth and its people", "correct":false },
+        { "answer": "The Queen of England", "correct":false },
+        { "answer": "Australia and its people", "correct":true }
+    ],
+    "comment": ""
+},
+{
+	"id": 32,
+    "statement": "When were the colonies united into a federation of states?",
+    "answers": [
+        { "answer": "1905", "correct":false },
+        { "answer": "1891", "correct":false },
+        { "answer": "1901", "correct":true }
+    ],
+   	"comment": ""
+},
+{
+	"id": 33,
+    "statement": "What is the population of Australia today?",
+    "answers": [
+        { "answer": "16 million", "correct":false },
+        { "answer": "32 million", "correct":false },
+        { "answer": "22 million", "correct":true }
+    ],
+    "comment": ""
+},
+{
+	"id": 34,
+    "statement": "What was the first colony established by the British?",
+    "answers": [
+        { "answer": "Queensland", "correct":false },
+        { "answer": "Victoria", "correct":false },
+        { "answer": "New South Wales", "correct":true }
+    ],
+    "comment": ""
+},    
+{
+	"id": 35,
+    "statement": "What are the three Australian flags?",
+    "answers": [
+        { "answer": "The Australian National Flag, the Australian Aboriginal Flag and the Tasmanian Flag", "correct":false },
+        { "answer": "The Australian National Flag, the British Flag and the Torres Strait Islander Flag", "correct":false },
+        { "answer": "The Australian National Flag, the Australian Aboriginal Flag and the Torres Strait Islander Flag", "correct":true }
+    ],
+    "comment": ""
+},
+{
+	"id": 36,
+	"statement": "What does the Commonwealth Coat of Arms identify?",
+	"answers": [
+	    {"answer": "The six states and federation", "correct": false},
+	    {"answer": "The authority and property of the Commonwealth of Australia", "correct": true},
+	    {"answer": "The role and authority of the Australian army", "correct": false}
+	],
+    "comment": ""
+},
+{
+	"id": 37,
+    "statement": "What does having a parliamentary democracy mean?",
+    "answers": [
+        {"answer": "Only parliament members are involved in how the country is governed", "correct": false},
+        {"answer": "All Australians are involved in how the country is governed", "correct": true},
+        {"answer": "Only parliament members can vote", "correct": false}
+    ],
+    "comment": ""
+},
+{
+	"id": 38,
+    "statement": "What type of religious heritage does Australia have?",
+    "answers": [
+        {"answer": "Protestant", "correct": false},
+        {"answer": "Judaeo-Christian", "correct": true},
+        {"answer": "Atheist", "correct": false}
+    ],
+    "comment": ""
+},
+{
+	"id": 39,
+    "statement": "Which of the following is not a right associated with being an Australian citizen?",
+    "answers": [
+        {"answer": "Voting in federal and state or territory elections, and in a referendum", "correct": false},
+        {"answer": "Seeking election to parliament", "correct": false},
+        {"answer": "Owning a business", "correct": true}
+    ],
+    "comment": ""
+},
+{
+	"id": 40,
+    "statement": "All Australians must obey the laws made by",
+    "answers": [    
+        {"answer": "The Australian Parliament, the Aboriginal parliament and the territory parliaments", "correct": false},
+        {"answer": "The Australian Parliament, British Parliament, and state and territory parliaments", "correct": false},
+        {"answer": "The Australian Parliament, state and territory parliaments, and local government", "correct": true}
+    ],
+    "comment": ""
+},
+{
+	"id": 41,
+    "statement": "Why is there compulsory voting in Australia?",
+    "answers": [        
+        {"answer": "Compulsory voting is a way to know exactly how many citizens are in Australia", "correct": false},
+        {"answer": "Because Australia still follows the old British election rules", "correct": false},
+        {"answer": "Compulsory voting is a way to make sure that the people we elect are really the ones that the majority of the people want", "correct": true}
+    ],
+    "comment": "왜 의무투표제가 존재하나?"
+},
+{
+	"id": 42,
+    "statement": "What is the Australian Electoral Commission?",
+    "answers": [        
+        {"answer": "A governmental organization", "correct": false},
+        {"answer": "A private company", "correct": false},
+        {"answer": "A Commonwealth agency", "correct": true}
+    ],
+    "comment": "선거관리위원회는 연방정부 대리인."
+},
+{
+	"id": 43,
+    "statement": "In Australian politics, how can you raise matters that concern you?",
+    "answers": [    
+        {"answer": "You can attend the Australian Parliament to discuss matters that concern you", "correct": false},
+        {"answer": "You can make an appointment with your local member of parliament or you can write him/her a letter", "correct": true},
+        {"answer": "You can call the Prime Minister and discuss matters that concern you on the phone", "correct": false}
+    ],
+    "comment": ""
+},
+{
+	"id": 44,
+    "statement": "How can the Australian Constitution be changed?",
+    "answers": [    
+        {"answer": "It can only be changed by the Prime Minister", "correct": false},
+        {"answer": "It can only be changed through a special vote", "correct": true},
+        {"answer": "It can only be changed by Her Majesty Queen Elizabeth II", "correct": false}
+    ],
+    "comment": ""
+},
+{
+	"id": 45,
+    "statement": "Who elects the members of the Australian Houses of Parliament?",
+    "answers": [    
+        {"answer": "The Australian people", "correct": true},
+        {"answer": "The Governor-General", "correct": false},
+        {"answer": "The Prime Minister", "correct": false}
+    ],
+    "comment": ""
+},
+{
+	"id": 46,
+    "statement": "How many representatives from each state are there in the Senate?",
+    "answers": [    
+        {"answer": "76", "correct": false},
+        {"answer": "150", "correct": false},
+        {"answer": "12", "correct": true}
+    ],
+    "comment": ""
+},
+{
+	"id": 47,
+    "statement": "What does COAG stand for?",
+    "answers": [    
+        {"answer": "The Council of Australian Government", "correct": true},
+        {"answer": "The Council of Australian Government", "correct": false},
+        {"answer": "The Council of Australian Government", "correct": false}
+    ],
+    "comment": ""
+},
+{
+	"id": 48,
+    "statement": "How many steps does a Bill have to go through to become a law?",
+    "answers": [    
+        {"answer": "3", "correct": false},
+        {"answer": "5", "correct": false},
+        {"answer": "4", "correct": true}
+    ],
+    "comment": ""
+},
+{
+	"id": 49,
+    "statement": "Who is Australia's Head of State?",
+    "answers": [    
+        {"answer": "The Prime Minister of Australia",  "correct": false},
+        {"answer": "The president of Australia", "correct": false},
+        {"answer": "The Queen of Australia", "correct": true}
+    ],
+    "comment": ""
+},
+{
+	"id": 50,
+    "statement": "Which of the followings is NOT a role of the Governor-General?",
+    "answers": [    
+        {"answer": "To sign all Bills passed by the Australian Parliament into law", "correct": false},
+        {"answer": "To perform ceremonial duties", "correct": false},
+        {"answer": "To attend parliament routine debates", "correct": true}
+    ],
+    "comment": ""
+}
+]

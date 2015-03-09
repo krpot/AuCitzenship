@@ -32,17 +32,17 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
 		Question item = getItem(position);
 		
 		TextView title = (TextView) convertView.findViewById(android.R.id.text1);
-		title.setText(item.question);
+		title.setText(item.statement);
 		title.setTag(item);
 		
 		//RadioGroup radAnswer = (RaidoGroup)findViewById(R.id.radioAnswer);
-		RadioButton radioA = (RadioButton)convertView.findViewById(R.id.radioa);
-		RadioButton radioB = (RadioButton)convertView.findViewById(R.id.radiob);
-		RadioButton radioC = (RadioButton)convertView.findViewById(R.id.radioc);
+		//RadioButton radioA = (RadioButton)convertView.findViewById(R.id.radioa);
+		//RadioButton radioB = (RadioButton)convertView.findViewById(R.id.radiob);
+		//RadioButton radioC = (RadioButton)convertView.findViewById(R.id.radioc);
 		
-		radioA.setText(item.a);
-		radioB.setText(item.b);
-		radioC.setText(item.c);
+		//radioA.setText(item.a);
+		//radioB.setText(item.b);
+		//radioC.setText(item.c);
 			
 		return convertView;
 	}

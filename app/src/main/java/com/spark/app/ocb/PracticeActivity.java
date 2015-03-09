@@ -5,10 +5,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
+import com.spark.app.ocb.entity.Answer;
+import com.spark.app.ocb.entity.Exam;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.SysUtils;
@@ -23,11 +28,14 @@ public class PracticeActivity extends Activity {
 	private static final String TAG = "PracticeActivity";
 	
 	private Dao<Question, Integer> mQDao = null;
-	private TextView txtTitle = null; 
+	private TextView txtTitle = null;
+    private RadioGroup radioAnswer;
 	private RadioButton radioA, radioB, radioC = null;
+    private Button btnNext, btnFinish;
 	
 	private Set<Integer> mQuestionIds = new HashSet<Integer>();
-	
+    private Exam mExam = new Exam();
+
 	private int mQuestoinId, mCurrentNo = 1;
 	
 
@@ -51,28 +59,40 @@ public class PracticeActivity extends Activity {
 	 * Click event handler for btnBefore
 	 * @param view
 	 */
-	public void btnBeforeClick(View view){
-		if (mCurrentNo<=1){
-			SysUtils.toast("Begining of the questions.");
-			return;
-		}
-		
-		mCurrentNo--;
-		loadData();
-	}
-	
+//	public void btnBeforeClick(View view){
+//		if (mCurrentNo<=1){
+//			//SysUtils.toast("Begining of the questions.");
+//			return;
+//		}
+//
+//		mCurrentNo--;
+//		loadData();
+//	}
+//
 	/**
 	 * Click event handler for btnNext
 	 * @param view
 	 */
-	public void btnNextClick(View view){
-		if (mCurrentNo>=20){
-			SysUtils.toast("End of the questions.");
-			return;
-		}
-		
-		mCurrentNo++;
-		loadData();
+	public void onButtonClick(View view){
+        switch(view.getId()){
+            case R.id.btnNext:
+                if (mCurrentNo>=20){
+                    SysUtils.toast("End of the questions.");
+                    return;
+                }
+
+                mCurrentNo++;
+                //if (mCurrentNo>19){
+                    //btnNext.setEnabled(false);
+                //}
+                loadData();
+                break;
+
+            case R.id.btnFinish:
+                //TODO.
+                break;
+        }
+
 	}
 
 	private void setupView(){
@@ -80,12 +100,31 @@ public class PracticeActivity extends Activity {
 		radioA = (RadioButton)findViewById(R.id.radioa);
 		radioB = (RadioButton)findViewById(R.id.radiob);
 		radioC = (RadioButton)findViewById(R.id.radioc);
+
+        radioAnswer = (RadioGroup)findViewById(R.id.radioAnswer);
+        radioAnswer.setOnCheckedChangeListener(onCheckedChangeListener);
+
+        //radioB.setOnCheckedChangeListener(onCheckedChangeListener);
+        //radioC.setOnCheckedChangeListener(onCheckedChangeListener);
+
+        btnNext     = (Button)findViewById(R.id.btnNext);
+        btnFinish   = (Button)findViewById(R.id.btnFinish);
 	}
-	
+
+    private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener(){
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            Log.d(TAG, "#####Checked:" + checkedId);
+        }
+    };
+
+    /*
+     *
+     */
 	private void loadData() {
 		if (mQDao==null)
 			mQDao = BeanUtils.getQuestionDao(this);
-		
+
 		Question question = null;
 		try {
 			Random random = new Random();
@@ -101,6 +140,7 @@ public class PracticeActivity extends Activity {
 			
 			Log.d(TAG, "Generated question Id:" + mQuestoinId);
 			mQuestoinId = mCurrentNo;
+
 			question = mQDao.queryForId(mQuestoinId);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -109,13 +149,21 @@ public class PracticeActivity extends Activity {
 		
 		if (question == null) return;
 		
-		txtTitle.setText(mCurrentNo + ". " + question.question);
+		txtTitle.setText(mCurrentNo + ". " + question.statement);
 		txtTitle.setTag(question);
-		radioA.setText(question.a);
-		radioB.setText(question.b);
-		radioC.setText(question.c);
+
+        int i=0;
+        for (Answer answer :question.answers){
+            RadioButton radioButton = (RadioButton)radioAnswer.getChildAt(i);
+            radioButton.setText(answer.answer);
+            radioButton.setTag(answer);
+            i++;
+        }
 	}
-	
+
+    /*
+     *
+     */
 	private int generateQuestionId(int aStart, int aEnd, Random aRandom){
 	    if ( aStart > aEnd ) {
 	      throw new IllegalArgumentException("Start cannot exceed End.");
@@ -128,5 +176,12 @@ public class PracticeActivity extends Activity {
 	    
 	    return randomNumber;
 	}
+
+    private void setButtons(){
+        //mCurrentNo==1;
+        //mCurrentNo==20;
+        //btnCheckAnswer.setText(R.string.check_answer);
+        //btnCheckAnswer.setText(R.string.finish);
+    }
 
 }

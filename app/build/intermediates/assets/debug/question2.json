@@ -1,0 +1,202 @@
+[
+{
+	"id": 21,
+    "statement": "What is the first sentence of the citizenship pledge?",
+    "answers": [
+        { "answer": "I pledge my loyalty to Australia and its people", "correct":false },
+        { "answer": "From this time forward, under God", "correct":true },
+        { "answer": "I pledge my loyalty to Australia, under God", "correct":false }
+    ],
+    "comment": "호주 시민권 선서는 저는 지금부터 라는 문장으로 시작한다."
+},
+{
+	"id": 22,
+    "statement": "Who were Australia's first inhabitants?",
+    "answers": [
+        { "answer": "Aboriginal and Maori people", "correct":false },
+        { "answer": "Aboriginal and Torres Strait Islander people", "correct":true },
+        { "answer": "British convicts and Chinese immigrants", "correct":false }
+    ],
+   	"comment": "호주에 처음 거주하던 사람들은 본토 원주민과 토레스 해협 도서민들."
+},
+{
+	"id": 23,
+    "statement": "Which of these statements about the Australia's first inhabitants is incorrect?",
+    "answers": [
+        { "answer": "Australia's Indigenous cultures are the oldest continuing cultures in the world", "correct":false },
+        { "answer": "Australia's indigenous people share common beliefs and traditions that still guide them today", "correct":false },
+        { "answer": "Australia's indigenous people have lived in Australia and Tasmania for between 5000 and 10000 years", "correct":true }
+    ],
+    "comment": "본토 원주민은 호주 본토와 타즈마니아 출신으로 4만-6만 년 동안 호주에서 거주."
+},
+{
+	"id": 24,
+    "statement": "When did European settlement begin?",
+    "answers": [
+        { "answer": "When gold was discovered in Australia", "correct":false },
+        { "answer": "When the first 11 convict ships arrived from Great Britain", "correct":true },
+        { "answer": "When Captain Arthur Phillip arrived from Great Britain", "correct":false }
+    ],
+    "comment": "1788년 1월 26일, '최초 선단(First Fleet)'이라고 알려지게 된 11척의 죄수 수송선이 영국으로부터 도착하면서 유럽인 정착이 시작되었다."
+},    
+{
+	"id": 25,
+    "statement": "What is the name of the first 11 convict ships that arrived from Great Britain?",
+    "answers": [
+        { "answer": "The 'First Fleet'", "correct":true },
+        { "answer": "The 'Australian Fleet'", "correct":false },
+        { "answer": "The 'Convict Fleet'", "correct":false }
+    ],
+    "comment": "최초 선단(First Fleet)은 영국에서 온 11척은 죄수 수송선."
+},
+{
+	"id": 26,
+	"statement": "Why did Great Britain send convicts to Australia in the 1800s?",
+	"answers": [
+	    {"answer": "British laws were harsh and all convicts had to be sent to Australia for forced labour", "correct": false},
+	    {"answer": "Australian new free settlers needed labour to build infrastructure", "correct": false},
+	    {"answer": "British laws were harsh and the jails could not hold the large number of people imprisoned for their crimes", "correct": true}
+	],
+    "comment": "당시 영국의 법은 가혹하여 감옥은 범죄로 인해 투옥된 수많은 사람을 전부 수용할 수 없었다."
+},
+{
+	"id": 27,
+    "statement": "Who were the first large group of migrants not from Europe in the 1800's?",
+    "answers": [
+        {"answer": "Chinese", "correct": true},
+        {"answer": "East Indians", "correct": false},
+        {"answer": "Vietnamese", "correct": false}
+    ],
+    "comment": "유럽 출신의 이민자들을 제외한 최초의 대규모 이민자들은 이 시기에 도착한 중국인들이었다."
+},
+{
+	"id": 28,
+    "statement": "What happened in Australia on 26 January 1788?",
+    "answers": [
+        {"answer": "Gold was discovered", "correct": false},
+        {"answer": "European settlement started", "correct": true},
+        {"answer": "The colony of New South Wales was formed", "correct": false}
+    ],
+    "comment": "1788년 1월 26일 최초선단이 영국에서 도착하면서 유럽인 정착이 시작되었다."
+},
+{
+	"id": 29,
+    "statement": "In Australia, how do you call the federation of states?",
+    "answers": [
+        {"answer": "The Federal States of Australia", "correct": false},
+        {"answer": "The Commonwealth of Australia", "correct": true},
+        {"answer": "The United States of Australia", "correct": false}
+    ],
+    "comment": "주 연방을 호주 연방정부라고 부른다."
+},
+{
+	"id": 30,
+    "statement": "How many languages are spoken in Australia?",
+    "answers": [    
+        {"answer": "Over 200", "correct": true},
+        {"answer": "About 100", "correct": false},
+        {"answer": "Over 300", "correct": false}
+    ],
+    "comment": "호주의 국어는 영어이며 다양한 지역사회에서는 200개 이상의 언어가 사용된다."
+},
+{
+	"id": 31,
+    "statement": "How many mainland territories are in Australia?",
+    "answers": [        
+        {"answer": "4", "correct": false},
+        {"answer": "2", "correct": true},
+        {"answer": "3", "correct": false}
+    ],
+    "comment": "6개주와 2개의 테리토리. Australia Capital Territory(ACT) - Canberra, Northern Territory(NT) - Darwin"
+},
+{
+	"id": 32,
+    "statement": "What are the states of Australia?",
+    "answers": [        
+        {"answer": "New South Wales, Victoria, Queensland, Eastern Australia, South Australia and Tasmania", "correct": false},
+        {"answer": "New South Wales, Victoria, Queensland, Western Australia, Northern Australia and South Australia", "correct": false},
+        {"answer": "New South Wales, Victoria, Queensland, Western Australia, South Australia and Tasmania", "correct": true}
+    ],
+    "comment": "호주는 6개의 주와 2개의 테리토리로 구성되어 있다. NSW, VIC, QLD, WA, SA, TAS"
+},
+{
+	"id": 33,
+    "statement": "Which one of the following is the smallest of the mainland states?",
+    "answers": [    
+        {"answer": "New South Wales", "correct": false},
+        {"answer": "Queensland", "correct": false},
+        {"answer": "Victoria", "correct": true}
+    ],
+    "comment": "웨스턴 오스트레일리아가 가장 크고 퀸즈랜드가 뉴사우스웨일즈보다 크다."
+},
+{
+	"id": 34,
+    "statement": "What do people celebrate on Australia Day?",
+    "answers": [    
+        {"answer": "All Australians who served and died in wars, conflicts and peacekeeping operations", "correct": false},
+        {"answer": "All that is great about Australia and being Australian", "correct": true},
+        {"answer": "The birth of Australia's Head of State, Queen Elizabeth II", "correct": false}
+    ],
+    "comment": "Australia Day는 매년 1월 26일로 모든 주와 테리토리에서 공휴일이다."
+},
+{
+	"id": 35,
+    "statement": "Who was the commander of the First Fleet?",
+    "answers": [    
+        {"answer": "Captain Arthur Conan Doyle", "correct": false},
+        {"answer": "Captain Conan Philip", "correct": false},
+        {"answer": "Captain Arthur Phillip", "correct": true}
+    ],
+    "comment": "최초선단을 이끈 사람은 Arthur Phillip 선장."
+},
+{
+	"id": 36,
+    "statement": "What is the significance of Anzac Day?",
+    "answers": [    
+        {"answer": "Anzac Day is a solemn day when we remember the arrival of the First Fleet from Great Britain in 1788", "correct": false},
+        {"answer": "Anzac Day is a solemn day when we remember the landing of the Australian and New Zealand Army Corps in Turkey during World War I", "correct": false},
+        {"answer": "Anzac Day is a solemn day when we remember the sacrifice of all Australians who served and died in wars, conflicts and peacekeeping operations", "correct": true}
+    ],
+    "comment": "Anzac Day는 매년 4월 25일로 전쟁, 분쟁 및 평화유지 작전에 참전하여 사망한 모든 호주 국민의 희생을 기억하는 엄숙한 날"
+},
+{
+	"id": 37,
+    "statement": "What is the colors of the Australian National Flag?",
+    "answers": [    
+        {"answer": "Blue, white and red", "correct": true},
+        {"answer": "Black, white and red", "correct": false},
+        {"answer": "Blue, grey and red", "correct": false}
+    ],
+    "comment": "호주국기의 왼쪽 위에 있는 문양은 영국의 유니온 잭으로 영국인의 호주 정착 역사를 상징."
+},
+{
+	"id": 38,
+    "statement": "What is the Australia's national flower?",
+    "answers": [    
+        {"answer": "The golden wattle", "correct": true},
+        {"answer": "The opal", "correct": false},
+        {"answer": "A kangaroo and an emu", "correct": false}
+    ],
+    "comment": "The opal은 호주의 국가 보석이고 캥거루와 타조는 연방정부 문장에 들어있는 상징이다."
+},
+{
+	"id": 39,
+    "statement": "What are Australia's national colours?",
+    "answers": [    
+        {"answer": "Blue and gold",  "correct": false},
+        {"answer": "Green and blue", "correct": false},
+        {"answer": "Green and gold", "correct": true}
+    ],
+    "comment": "호주의 국가 색깔은 초록과 황금색으로 국가대표 유니폼도 이 색이다."
+},
+{
+	"id": 40,
+    "statement": "What is the first sentence of the Australia's national anthem?",
+    "answers": [    
+        {"answer": "We've golden soil and wealth for toil", "correct": false},
+        {"answer": "Advance Australia Fair", 	"correct": false},
+        {"answer": "Australians all let us rejoice", "correct": true}
+    ],
+    "comment": "Advance Australia Fair는 호주 국가의 제목이므로 헷갈리지 말자."
+}
+]

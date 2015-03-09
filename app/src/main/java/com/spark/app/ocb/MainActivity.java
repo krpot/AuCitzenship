@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -56,7 +57,10 @@ public class MainActivity extends Activity {
 	private void setupView(){
 		btnPractice = (Button)findViewById(R.id.btnPractice);
 	}
-	
+
+    /*
+     *
+     */
 	private void loadData() {
 		if (mQDao==null)
 			mQDao = BeanUtils.getQuestionDao(this);
@@ -64,21 +68,23 @@ public class MainActivity extends Activity {
 		
 		BufferedInputStream in = null;
 		try {
-			mQDao.queryRaw("delete from questions");
+			//***mQDao.queryRaw("delete from questions");
 
-			List<Question> questions = mQDao.queryForAll();
-			if (!questions.isEmpty()) return;
-			
-			AssetManager asm = this.getAssets();	
-			in = new BufferedInputStream(asm.open("qbank.json"));
-			String jsonStr = FileUtils.readTextFile(in);
-			//Log.d(TAG, json);
-			
-			
-			questions = Question.loadFromJson(jsonStr);
-			for (Question question : questions){	
-				mQDao.create(question);
-			}
+            long count = mQDao.countOf();
+            Log.d(TAG, "#####question.size:" + count);
+			if (count>20) return;
+
+			AssetManager asm = this.getAssets();
+            for (int i=1; i<=3; i++) {
+                in = new BufferedInputStream(asm.open(String.format("question%d.json", i)));
+                String jsonStr = FileUtils.readTextFile(in);
+                Log.d(TAG, jsonStr);
+
+                List<Question> questions = Question.loadFromJson(jsonStr);
+                for (Question question : questions) {
+                    mQDao.create(question);
+                }
+            }
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

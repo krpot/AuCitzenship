@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Random;
 import java.util.UUID;
 
 public class SysUtils {
@@ -76,7 +77,7 @@ public class SysUtils {
 	 */
 	public static String getUniqueId(){
 		String deviceId = getTelephonyManager().getDeviceId();
-		//TODO.get deviceId for devices it is not available
+		//rTODO.get deviceId for devices it is not available
 		if (deviceId==null || "".equals(deviceId)){
 			deviceId = UUID.randomUUID().toString();
 		}
@@ -206,4 +207,21 @@ public class SysUtils {
 			});
 	}
 
+    /*
+    *
+    */
+    public static int randomNumber(int aStart, int aEnd){
+        if ( aStart > aEnd ) {
+            throw new IllegalArgumentException("Start cannot exceed End.");
+        }
+        //get the range, casting to long to avoid overflow problems
+        long range = (long)aEnd - (long)aStart + 1;
+
+        Random aRandom = new Random();
+        // compute a fraction of the range, 0 <= frac < range
+        long fraction = (long)(range * aRandom.nextDouble());
+        int randomNumber =  (int)(fraction + aStart);
+
+        return randomNumber;
+    }
 }

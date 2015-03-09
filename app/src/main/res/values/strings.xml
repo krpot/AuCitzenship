@@ -14,5 +14,7 @@
     <!-- Practice Activity -->
     <string name="before">Before</string>
     <string name="next">Next</string>
+    <string name="check_answer">Check answer</string>
+    <string name="finish">Finish</string>
 
 </resources>

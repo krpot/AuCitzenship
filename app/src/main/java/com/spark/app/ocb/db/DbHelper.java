@@ -8,6 +8,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
 
 import java.sql.SQLException;
@@ -21,10 +22,11 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
 	// name of the database file for your application -- change to something appropriate for your app
 	private static final String DATABASE_NAME = "citizen.db";
 	// any time you make changes to your database objects, you may have to increase the database version
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 1;
 
 	// the DAO object we use to access the SimpleData table
 	private Dao<Question, Integer> mQuestionDao = null;
+	private Dao<Answer, Integer> mAnswerDao = null;
 
 	public DbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,6 +42,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
 			Log.i(DbHelper.class.getName(), "onCreate");
 			
 			TableUtils.createTable(connectionSource, Question.class);
+			TableUtils.createTable(connectionSource, Answer.class);
 		} catch (SQLException e) {
 			Log.e(DbHelper.class.getName(), "Can't create database", e);
 			throw new RuntimeException(e);
@@ -55,6 +58,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
 		try {
 			Log.i(DbHelper.class.getName(), "onUpgrade");
 			TableUtils.dropTable(connectionSource, Question.class, true);
+			TableUtils.dropTable(connectionSource, Answer.class, true);
 			// after we drop the old databases, we create the new ones
 			onCreate(db, connectionSource);
 		} catch (SQLException e) {
@@ -73,6 +77,13 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
 		}
 		return mQuestionDao;
 	}
+
+    public Dao<Answer, Integer> getAnswerDao() throws SQLException {
+		if (mAnswerDao == null) {
+            mAnswerDao = getDao(Answer.class);
+		}
+		return mAnswerDao;
+	}
 	
 	/**
 	 * Close the database connections and clear any cached DAOs.
@@ -80,6 +91,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
 	@Override
 	public void close() {
 		super.close();
-		mQuestionDao = null;
+        mAnswerDao = null;
+        mQuestionDao = null;
 	}
 }

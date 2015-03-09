@@ -7,7 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * @author sunghun
  *
  */
-@DatabaseTable(tableName="practicedetail")
+//@DatabaseTable(tableName="practicedetail")
 public class PracticeDetail{
 
 	@DatabaseField(id=true) private String id;

@@ -4,6 +4,8 @@
     <eat-comment/>
     <string name="app_name">OurCommonBond</string>
     <string name="before">Before</string>
+    <string name="check_answer">Check answer</string>
+    <string name="finish">Finish</string>
     <string name="menu_settings">Settings</string>
     <string name="misc">Misc</string>
     <string name="next">Next</string>

@@ -89,7 +89,7 @@ public class PracticeActivity extends Activity {
                 break;
 
             case R.id.btnFinish:
-                //TODO.
+                this.finish();
                 break;
         }
 
@@ -142,18 +142,20 @@ public class PracticeActivity extends Activity {
 			mQuestoinId = mCurrentNo;
 
 			question = mQDao.queryForId(mQuestoinId);
-		} catch (SQLException e) {
+
+        } catch (SQLException e) {
 			e.printStackTrace();
 			SysUtils.toast("Load data error.");
 		}
-		
+
 		if (question == null) return;
-		
+
 		txtTitle.setText(mCurrentNo + ". " + question.statement);
 		txtTitle.setTag(question);
 
         int i=0;
-        for (Answer answer :question.answers){
+        Log.d(TAG, "##### Question.Answer.size:" + question.answers.size());
+        for (Answer answer : question.answers){
             RadioButton radioButton = (RadioButton)radioAnswer.getChildAt(i);
             radioButton.setText(answer.answer);
             radioButton.setTag(answer);

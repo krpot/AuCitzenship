@@ -25,7 +25,8 @@ import java.util.List;
 public class MainActivity extends Activity {
 	
 	private static final String TAG = "MainActivity";
-	
+	private static final String QUESTION_PATH = "questions";
+
 	private Dao<Question, Integer> mQDao = null;
 	private Button btnPractice = null;
 
@@ -75,14 +76,20 @@ public class MainActivity extends Activity {
 			if (count>20) return;
 
 			AssetManager asm = this.getAssets();
-            for (int i=1; i<=3; i++) {
-                in = new BufferedInputStream(asm.open(String.format("question%d.json", i)));
-                String jsonStr = FileUtils.readTextFile(in);
-                Log.d(TAG, jsonStr);
+            String[] list = asm.list("");
+            for (int i=0, sz=list.length; i<sz; i++) {
+                String s = list[i];
+                Log.d(TAG, "#####JSON file name:" + s);
 
-                List<Question> questions = Question.loadFromJson(jsonStr);
-                for (Question question : questions) {
-                    mQDao.create(question);
+                if (s.endsWith(".json")) {
+                    in = new BufferedInputStream(asm.open(s));
+                    String jsonStr = FileUtils.readTextFile(in);
+                    Log.d(TAG, jsonStr);
+
+                    List<Question> questions = Question.loadFromJson(jsonStr);
+                    for (Question question : questions) {
+                        mQDao.create(question);
+                    }
                 }
             }
 			

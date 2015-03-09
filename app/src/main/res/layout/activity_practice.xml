@@ -8,7 +8,7 @@
     tools:context=".MainActivity" >
 
     <include
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         layout="@layout/question_item" />
@@ -23,7 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="btnBeforeClick"
-            android:text="@string/before" />
+            android:text="@string/before"
+            android:background="@drawable/btndefault"
+            android:layout_margin="2dp" />
 
         <Button
             android:id="@+id/btnNext"
@@ -31,7 +33,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="btnNextClick"
-            android:text="@string/next" />
+            android:text="@string/next"
+            android:background="@drawable/btndefault"
+            android:layout_margin="2dp" />
 
     </LinearLayout>
 

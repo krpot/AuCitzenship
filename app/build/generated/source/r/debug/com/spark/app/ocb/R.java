@@ -11,7 +11,14 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int btndanger=0x7f020000;
+        public static final int btndefault=0x7f020001;
+        public static final int btninfo=0x7f020002;
+        public static final int btnprimary=0x7f020003;
+        public static final int btnsuccess=0x7f020004;
+        public static final int btnwarning=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int well=0x7f020007;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f070000;

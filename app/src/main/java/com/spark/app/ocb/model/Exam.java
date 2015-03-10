@@ -29,6 +29,12 @@ public class Exam {
         return false;
     }
 
+    public Question getQuestion(int pos){
+        if (questions.isEmpty() || pos<0 || pos >questions.size()-1) return null;
+
+        return questions.get(pos);
+    }
+
     public void setSelected(Question question, int value){
         int location = questions.indexOf(question);
         if (location>-1 || location<=questions.size()-1) {

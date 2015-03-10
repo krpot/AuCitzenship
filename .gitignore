@@ -1,5 +1,10 @@
 .DS_Store
 
+.idea
+
+.idea
+import-summary.txt
+
 # built application files
 *.apk
 *.ap_

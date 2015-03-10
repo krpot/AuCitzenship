@@ -13,7 +13,7 @@ import org.json.JSONObject;
 public class Answer {
 
     @DatabaseField(generatedId = true)
-    public int id;
+    public int id=-1;
 
     @DatabaseField
     public String answer = "";
@@ -23,6 +23,21 @@ public class Answer {
 
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "question_id")
     public Question question;
+
+    public Answer(){}
+
+    public Answer(String answer, boolean correct, Question question) {
+        this.answer = answer;
+        this.correct = correct;
+        this.question = question;
+    }
+
+    public Answer(int id, String answer, boolean correct, Question question) {
+        this.id = id;
+        this.answer = answer;
+        this.correct = correct;
+        this.question = question;
+    }
 
     @Override
     public String toString() {
@@ -35,20 +50,17 @@ public class Answer {
     }
 
     public static Answer toObject(JSONObject json) throws JSONException {
+        return toObject(json, new Question());
+    }
+
+    public static Answer toObject(JSONObject json, Question question) throws JSONException {
         Answer answer = new Answer();
         if (json==null)
             return answer;
 
-        //answer.id = i;
         answer.answer = json.optString("answer");
         answer.correct = json.optBoolean("correct");
-        answer.question = new Question();
-
-        //q.a = json.optString("a");//.replaceAll("\'", "\'\'");
-        //q.b = json.optString("b");//.replaceAll("\'", "\'\'");
-        //q.c = json.optString("c");//.replaceAll("\'", "\'\'");
-        //q.rightAnswer = json.optString("r_a");
-
+        answer.question = question;
         return answer;
     }
 }

@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.j256.ormlite.dao.Dao;
+import com.spark.app.ocb.activity.PracticeActivity;
+import com.spark.app.ocb.activity.TestActivity;
+import com.spark.app.ocb.activity.TestIntroActivity;
+import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.FileUtils;
@@ -47,15 +51,33 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * Click event handler for btnPrice
+	 * Click event handler for buttons
 	 * @param view
 	 */
-	public void btnPracticeClick(View view){
-		Intent i = new Intent(this, PracticeActivity.class);
-		startActivity(i);
+	public void onButtonClick(View view){
+        switch (view.getId()){
+            case R.id.btnPractice:
+                Intent intent1 = new Intent(this, PracticeActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.btnTest:
+                Intent intent2 = new Intent(this, TestIntroActivity.class);
+                startActivityForResult(intent2, AppConstants.REQUEST_MODAL);
+                break;
+        }
 	}
 
-	private void setupView(){
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (AppConstants.REQUEST_MODAL != requestCode) return;
+
+        if (resultCode == Activity.RESULT_OK) {
+            Intent intent = new Intent(this, TestActivity.class);
+            startActivityForResult(intent, AppConstants.REQUEST_MODAL);
+        }
+    }
+
+    private void setupView(){
 		btnPractice = (Button)findViewById(R.id.btnPractice);
 	}
 
@@ -65,15 +87,18 @@ public class MainActivity extends Activity {
 	private void loadData() {
 		if (mQDao==null)
 			mQDao = BeanUtils.getQuestionDao(this);
+
+        Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(this);
 		
 		
 		BufferedInputStream in = null;
 		try {
-			//***mQDao.queryRaw("delete from questions");
+            answerDao.deleteBuilder().clear();
+            mQDao.deleteBuilder().clear();
 
             long count = mQDao.countOf();
             Log.d(TAG, "#####question.size:" + count);
-			if (count>20) return;
+			//***if (count>20) return;
 
 			AssetManager asm = this.getAssets();
             String[] list = asm.list("");
@@ -89,6 +114,13 @@ public class MainActivity extends Activity {
                     List<Question> questions = Question.loadFromJson(jsonStr);
                     for (Question question : questions) {
                         mQDao.create(question);
+
+                        int answerNo = 0;
+                        for (Answer answer : question.answers) {
+                            answer.id = answerNo++;
+                            Log.d(TAG, "#####Answer:" + answer);
+                            answerDao.create(answer);
+                        }
                     }
                 }
             }

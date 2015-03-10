@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@android:string/untitled"
+        android:id="@+id/txtIntro"
+        android:background="@drawable/alertinfo"
+        android:layout_marginBottom="5dp"
+        android:padding="8dp"
+        android:linksClickable="true"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onButtonClick"
+        android:text="@string/start"
+        android:background="@drawable/btnprimary"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="5dp" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onButtonClick"
+        android:text="@string/cancel"
+        android:background="@drawable/btndefault" />
+
+</LinearLayout><!-- From: file:/Users/ianpark/projects/mobile/OurCommonBond/app/src/main/res/layout/activity_test_intro.xml -->

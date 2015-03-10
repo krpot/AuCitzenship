@@ -1,0 +1,18 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/txtSummary"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:background="@drawable/well"
+        android:text="Summary" />
+
+</LinearLayout><!-- From: file:/Users/ianpark/projects/mobile/OurCommonBond/app/src/main/res/layout/fragment_result_summary.xml -->

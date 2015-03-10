@@ -14,7 +14,39 @@
     <!-- Practice Activity -->
     <string name="before">Before</string>
     <string name="next">Next</string>
-    <string name="check_answer">Check answer</string>
+    <string name="another_go">Another go</string>
     <string name="finish">Finish</string>
+    <string name="submit">Submit</string>
+
+    <string name="key_index">Index</string>
+    <string name="key_answer">Answer</string>
+
+    <string name="start">Start</string>
+    <string name="cancel">Cancel</string>
+    <string name="test_result">Test result</string>
+    <string name="test_intro">
+        <![CDATA[
+        <p>
+        The citizenship test consists of 20 questions drawn at random from a pool of questions.
+        To pass the test, you must answer 75 per cent, or 15 out of 20 questions, correctly.
+        </p>
+        <p>
+        You will need to know and understand the information in the testable section of the Australian citizenship test resource book <a href=\"http://www.citizenship.gov.au/learn/cit_test/test_resource\">\'Australian Citizenship: Our Common Bond\'</a> to answer the questions in the citizenship test.
+        </p>
+        <p>
+        Your application fee covers the cost of the citizenship test. There is no extra charge for sitting the test more than once.
+        </p>
+        ]]>
+    </string>
+
+    <string name="confirm_submit_test">Are you sure to submit the test?</string>
+    <string name="alert_not_answered">There is a question you have not answered.</string>
+    <string name="alert_not_answered_plural">There are questions you have not answered.</string>
+    <string name="alert_test_finished">Test finished.</string>
+
+    <array name="tabs">
+        <item>Summary</item>
+        <item>Review</item>
+    </array>
 
 </resources>

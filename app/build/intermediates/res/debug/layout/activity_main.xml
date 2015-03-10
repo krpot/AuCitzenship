@@ -18,7 +18,7 @@
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:onClick="btnPracticeClick"
+            android:onClick="onButtonClick"
             android:text="@string/practice" />
 
         <Button
@@ -27,7 +27,8 @@
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/review" />
+            android:text="@string/review"
+            android:onClick="onButtonClick" />
 
     </TableRow>
 
@@ -37,12 +38,13 @@
         android:layout_weight="1" >
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/btnTest"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/test" />
+            android:text="@string/test"
+            android:onClick="onButtonClick" />
 
         <Button
             android:id="@+id/button4"
@@ -50,7 +52,8 @@
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/repeat" />
+            android:text="@string/repeat"
+            android:onClick="onButtonClick" />
 
     </TableRow>
 
@@ -65,7 +68,8 @@
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/misc" />
+            android:text="@string/misc"
+            android:onClick="onButtonClick" />
 
         <Button
             android:id="@+id/button6"
@@ -73,7 +77,8 @@
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/misc" />
+            android:text="@string/misc"
+            android:onClick="onButtonClick" />
 
     </TableRow>
     

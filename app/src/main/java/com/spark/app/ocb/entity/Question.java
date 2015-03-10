@@ -10,7 +10,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author sunghun
@@ -28,7 +30,38 @@ public class Question{
     @ForeignCollectionField
     public Collection<Answer> answers = new ArrayList<Answer>();
 
+    public int selected = -1;
+
 	public Question(){}
+
+    public Answer getAnswer(int i){
+        if (i<0 || i>answers.size()-1) return null;
+
+        ArrayList<Answer> list = (ArrayList<Answer>) answers;
+        return list.get(i);
+    }
+
+    public void shuffle(){
+        long seed = System.nanoTime();
+        ArrayList<Answer> list = (ArrayList<Answer>) answers;
+        Collections.shuffle(list, new Random(seed));
+    }
+
+    public boolean answered(){
+        return this.selected > -1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Question question = (Question) o;
+
+        if (question.id<0 || this.id<0) return false;
+
+        return question.id == this.id;
+    }
 
     @Override
     public String toString() {
@@ -48,7 +81,7 @@ public class Question{
 		q.statement = json.optString("statement");
         JSONArray jAnswers = json.optJSONArray("answers");
         for (int i=0; i<jAnswers.length(); i++) {
-            Answer a = Answer.toObject(jAnswers.getJSONObject(i));
+            Answer a = Answer.toObject(jAnswers.getJSONObject(i), q);
             q.answers.add(a);
         }
 		return q;
@@ -56,7 +89,6 @@ public class Question{
 	
 	public static List<Question> loadFromJson(String jsonStr) throws JSONException{
 		List<Question> list = new ArrayList<Question>();
-		//JSONObject jsonObj = new JSONObject(jsonStr);
 		JSONArray jArray = new JSONArray(jsonStr);
 		for (int i=0; i<jArray.length(); i++){
 			JSONObject json = jArray.getJSONObject(i);
@@ -65,5 +97,15 @@ public class Question{
 		
 		return list;
 	}
+
+    public boolean isCorrect(){
+        int i = -1;
+        for (Answer answer: this.answers){
+            i++;
+            if (answer.correct) break;
+        }
+
+        return (i>0 && i == selected);
+    }
 
 }

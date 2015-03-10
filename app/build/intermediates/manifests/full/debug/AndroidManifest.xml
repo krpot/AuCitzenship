@@ -5,8 +5,8 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="9" />
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -25,7 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.spark.app.ocb.PracticeActivity" />
+        <activity android:name="com.spark.app.ocb.activity.PracticeActivity" />
+        <activity android:name="com.spark.app.ocb.activity.TestIntroActivity" />
+        <activity android:name="com.spark.app.ocb.activity.TestActivity" />
+        <activity android:name="com.spark.app.ocb.activity.TestResultActivity" />
     </application>
 
 </manifest>

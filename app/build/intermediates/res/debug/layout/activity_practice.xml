@@ -13,9 +13,17 @@
         android:layout_weight="1"
         layout="@layout/question_item" />
 
+    <TextView
+        android:id="@+id/txtComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:background="@drawable/well" />
+
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <Button
             android:id="@+id/btnNext"
@@ -26,6 +34,17 @@
             android:text="@string/next"
             android:background="@drawable/btndefault"
             android:layout_margin="2dp" />
+
+        <Button
+            android:id="@+id/btnAnothergo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onButtonClick"
+            android:text="@string/another_go"
+            android:background="@drawable/btndefault"
+            android:layout_margin="2dp"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnFinish"

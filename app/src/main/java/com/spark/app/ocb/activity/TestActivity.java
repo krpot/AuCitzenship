@@ -322,7 +322,6 @@ public class TestActivity extends Activity {
 
     private void showTestResult(){
         Intent intent = new Intent(TestActivity.this, TestResultActivity.class);
-        //AppConstants.EXTRA_DATA1, mExam);
         startActivity(intent);
 
         finish();

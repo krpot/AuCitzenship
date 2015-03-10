@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.j256.ormlite.dao.Dao;
+import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.FileUtils;
@@ -25,7 +26,8 @@ import java.util.List;
 public class MainActivity extends Activity {
 	
 	private static final String TAG = "MainActivity";
-	
+	private static final String QUESTION_PATH = "questions";
+
 	private Dao<Question, Integer> mQDao = null;
 	private Button btnPractice = null;
 
@@ -64,25 +66,41 @@ public class MainActivity extends Activity {
 	private void loadData() {
 		if (mQDao==null)
 			mQDao = BeanUtils.getQuestionDao(this);
+
+        Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(this);
 		
 		
 		BufferedInputStream in = null;
 		try {
-			//***mQDao.queryRaw("delete from questions");
+            answerDao.deleteBuilder().clear();
+            mQDao.deleteBuilder().clear();
 
             long count = mQDao.countOf();
             Log.d(TAG, "#####question.size:" + count);
-			if (count>20) return;
+			//***if (count>20) return;
 
 			AssetManager asm = this.getAssets();
-            for (int i=1; i<=3; i++) {
-                in = new BufferedInputStream(asm.open(String.format("question%d.json", i)));
-                String jsonStr = FileUtils.readTextFile(in);
-                Log.d(TAG, jsonStr);
+            String[] list = asm.list("");
+            for (int i=0, sz=list.length; i<sz; i++) {
+                String s = list[i];
+                Log.d(TAG, "#####JSON file name:" + s);
 
-                List<Question> questions = Question.loadFromJson(jsonStr);
-                for (Question question : questions) {
-                    mQDao.create(question);
+                if (s.endsWith(".json")) {
+                    in = new BufferedInputStream(asm.open(s));
+                    String jsonStr = FileUtils.readTextFile(in);
+                    Log.d(TAG, jsonStr);
+
+                    List<Question> questions = Question.loadFromJson(jsonStr);
+                    for (Question question : questions) {
+                        mQDao.create(question);
+
+                        int answerNo = 0;
+                        for (Answer answer : question.answers) {
+                            answer.id = answerNo++;
+                            Log.d(TAG, "#####Answer:" + answer);
+                            answerDao.create(answer);
+                        }
+                    }
                 }
             }
 			

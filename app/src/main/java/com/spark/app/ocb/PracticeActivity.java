@@ -2,6 +2,7 @@ package com.spark.app.ocb;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.GenericRawResults;
+import com.j256.ormlite.dao.RawRowMapper;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Exam;
 import com.spark.app.ocb.entity.Question;
@@ -19,24 +22,27 @@ import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.SysUtils;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
 public class PracticeActivity extends Activity {
 	
 	private static final String TAG = "PracticeActivity";
-	
-	private Dao<Question, Integer> mQDao = null;
-	private TextView txtTitle = null;
+
+	private Dao<Question, Integer> mQDao;
+	private TextView txtTitle, txtComment;
     private RadioGroup radioAnswer;
-	private RadioButton radioA, radioB, radioC = null;
-    private Button btnNext, btnFinish;
+	private RadioButton radioA, radioB, radioC;
+    private Button btnNext, btnAnothergo, btnFinish;
 	
 	private Set<Integer> mQuestionIds = new HashSet<Integer>();
     private Exam mExam = new Exam();
 
-	private int mQuestoinId, mCurrentNo = 1;
+	private int mQuestoinId, mPosition = -1;
 	
 
 	@Override
@@ -45,7 +51,8 @@ public class PracticeActivity extends Activity {
 		setContentView(R.layout.activity_practice);
 		
 		setupView();
-		loadData();
+        generateQuestions();
+        onButtonClick(btnNext);
 	}
 
 	@Override
@@ -60,12 +67,12 @@ public class PracticeActivity extends Activity {
 	 * @param view
 	 */
 //	public void btnBeforeClick(View view){
-//		if (mCurrentNo<=1){
+//		if (mPosition<=1){
 //			//SysUtils.toast("Begining of the questions.");
 //			return;
 //		}
 //
-//		mCurrentNo--;
+//		mPosition--;
 //		loadData();
 //	}
 //
@@ -76,20 +83,25 @@ public class PracticeActivity extends Activity {
 	public void onButtonClick(View view){
         switch(view.getId()){
             case R.id.btnNext:
-                if (mCurrentNo>=20){
+                if (mPosition>=19){
                     SysUtils.toast("End of the questions.");
                     return;
                 }
 
-                mCurrentNo++;
-                //if (mCurrentNo>19){
-                    //btnNext.setEnabled(false);
-                //}
-                loadData();
+                mPosition++;
+                nextQuestion();
+
+                if (isLastQuestion())
+                    btnNext.setEnabled(false);
+                break;
+
+            case R.id.btnAnothergo:
+                generateQuestions();
+                onButtonClick(btnNext);
                 break;
 
             case R.id.btnFinish:
-                //TODO.
+                this.finish();
                 break;
         }
 
@@ -97,69 +109,158 @@ public class PracticeActivity extends Activity {
 
 	private void setupView(){
 		txtTitle = (TextView)findViewById(android.R.id.text1);
+		txtComment = (TextView)findViewById(R.id.txtComment);
+
 		radioA = (RadioButton)findViewById(R.id.radioa);
 		radioB = (RadioButton)findViewById(R.id.radiob);
 		radioC = (RadioButton)findViewById(R.id.radioc);
 
-        radioAnswer = (RadioGroup)findViewById(R.id.radioAnswer);
-        radioAnswer.setOnCheckedChangeListener(onCheckedChangeListener);
+        radioA.setOnCheckedChangeListener(onCheckedChangeListener);
+        radioB.setOnCheckedChangeListener(onCheckedChangeListener);
+        radioC.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        //radioB.setOnCheckedChangeListener(onCheckedChangeListener);
-        //radioC.setOnCheckedChangeListener(onCheckedChangeListener);
+        radioAnswer = (RadioGroup)findViewById(R.id.radioAnswer);
+        //radioAnswer.setOnCheckedChangeListener(onCheckedChangeListener);
 
         btnNext     = (Button)findViewById(R.id.btnNext);
+        btnAnothergo= (Button)findViewById(R.id.btnAnothergo);
         btnFinish   = (Button)findViewById(R.id.btnFinish);
 	}
 
-    private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener(){
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener(){
+
         @Override
-        public void onCheckedChanged(RadioGroup group, int checkedId) {
-            Log.d(TAG, "#####Checked:" + checkedId);
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (!isChecked) return;
+
+            if (txtTitle.getTag() == null || !(txtTitle.getTag() instanceof Question)) return;
+            Question question = (Question)txtTitle.getTag();
+            Log.d(TAG, "##### Question:" + question);
+
+            //Answer a = (Answer)radioA.getTag(R.string.key_answer);
+            //if (!a.correct){
+            //}
+
+            RadioButton button = (RadioButton)buttonView;
+            if (button.getTag(R.string.key_answer) == null || !(button.getTag(R.string.key_answer) instanceof Answer)) return;
+            Answer answer = (Answer)button.getTag(R.string.key_answer);
+            Log.d(TAG, "##### Answer:" + answer);
+
+            String html = "";
+            btnNext.setEnabled(answer.correct);
+            if (answer.correct) {
+                html = "<p>Correct! </p>";
+
+                if (isLastQuestion()) {
+                    btnNext.setVisibility(View.GONE);
+                    btnAnothergo.setVisibility(View.VISIBLE);
+                }
+            } else {
+                html = "<p><font color='red'>Wrong! Try again.</font> </p>";
+            }
+
+            txtComment.setText(Html.fromHtml(html));
+
+            int selected = (Integer)button.getTag(R.string.key_index);
+            mExam.setSelected(question, selected);
         }
     };
 
     /*
      *
      */
-	private void loadData() {
-		if (mQDao==null)
-			mQDao = BeanUtils.getQuestionDao(this);
+    private void generateQuestions() {
+        mPosition = -1;
+        btnNext.setVisibility(View.VISIBLE);
+        btnAnothergo.setVisibility(View.GONE);
 
-		Question question = null;
-		try {
-			Random random = new Random();
-			if (mQuestionIds.size()<20){
-				do {
-					mQuestoinId = generateQuestionId(1, 20, random);
-				} while (mQuestionIds.contains(mQuestoinId));
+        if (mQDao==null)
+            mQDao = BeanUtils.getQuestionDao(this);
 
-				mQuestionIds.add(mQuestoinId);
-			} else {
-				mQuestoinId = generateQuestionId(1, 20, random);
-			}
-			
-			Log.d(TAG, "Generated question Id:" + mQuestoinId);
-			mQuestoinId = mCurrentNo;
+        Question question = null;
+        List<Question> questionList = null;
+        try {
+            String sql = "SELECT * FROM questions ORDER BY RANDOM() LIMIT 20";
+            questionList = mQDao.queryRaw(sql,
+                    new RawRowMapper<Question>(){
+                        @Override
+                        public Question mapRow(String[] strings, String[] strings2) throws SQLException {
+                            Question q = new Question();
+                            for (int i=0, sz=strings.length; i<sz; i++) {
+                                String column = strings[i];
+                                String value = strings2[i];
+                                if ("id".equals(column)) q.id = Integer.valueOf(value);
+                                if ("statement".equals(column)) q.statement = value;
+                            }
 
-			question = mQDao.queryForId(mQuestoinId);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			SysUtils.toast("Load data error.");
-		}
-		
-		if (question == null) return;
-		
-		txtTitle.setText(mCurrentNo + ". " + question.statement);
+                            return q;
+                        }
+                    }).getResults();
+
+
+            if (questionList == null || questionList.isEmpty()) return;
+
+            mExam.questions = questionList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            SysUtils.toast("Load data error.");
+        }
+    }
+
+    /*
+     *
+     */
+	private void nextQuestion() {
+        Question question = mExam.questions.get(mPosition);
+        Log.d(TAG, "##### Next Question:" + question);
+
+        try {
+            Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(this);
+            question.answers = answerDao.queryBuilder()
+                     .where()
+                     .eq("question_id", question.id)
+                     .query();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            SysUtils.toast("Load data error.");
+            return;
+        }
+
+        question.shuffle();
+		txtTitle.setText((mPosition + 1) + ". " + question.statement);
 		txtTitle.setTag(question);
+        txtComment.setText("");
+        btnNext.setEnabled(false);
+        radioAnswer.clearCheck();
+
+        Log.d(TAG, "##### Question.Answer.size:" + question.answers.size());
 
         int i=0;
-        for (Answer answer :question.answers){
+        for (Answer answer : question.answers){
+            Log.d(TAG, "##### question.answer:" + answer);
             RadioButton radioButton = (RadioButton)radioAnswer.getChildAt(i);
             radioButton.setText(answer.answer);
-            radioButton.setTag(answer);
+            radioButton.setTag(R.string.key_index, i);
+            radioButton.setTag(R.string.key_answer, answer);
             i++;
         }
+
 	}
+
+    private boolean isLastQuestion(){
+        return mPosition>=mExam.questions.size()-1;
+    }
+
+    private Question currentQuestion(){
+        if (mExam == null) return null;
+
+        if (mPosition>=0 && mPosition<=mExam.questions.size()-1)
+            return mExam.questions.get(mPosition);
+
+        return null;
+    }
 
     /*
      *
@@ -176,12 +277,5 @@ public class PracticeActivity extends Activity {
 	    
 	    return randomNumber;
 	}
-
-    private void setButtons(){
-        //mCurrentNo==1;
-        //mCurrentNo==20;
-        //btnCheckAnswer.setText(R.string.check_answer);
-        //btnCheckAnswer.setText(R.string.finish);
-    }
 
 }

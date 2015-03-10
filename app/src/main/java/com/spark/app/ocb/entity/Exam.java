@@ -1,9 +1,5 @@
 package com.spark.app.ocb.entity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,15 +10,39 @@ import java.util.List;
 public class Exam {
 
 	public int id = -1;
-    public List<Choice> choices = new ArrayList<Choice>();
+    public List<Question> questions = new ArrayList<Question>();
 
 	public Exam(){}
 
 
+    public boolean addQuestion(Question question){
+        if (!questions.contains(question)) {
+            return questions.add(question);
+        }
+
+        return false;
+    }
+
+    public String getInStatement(){
+        String s = "";
+        for (Question question : questions)
+            s += s.length()==0 ? question.id : "," + question.id;
+
+        return s;
+    }
+
+    public void setSelected(Question question, int value){
+        int location = questions.indexOf(question);
+        if (location>-1 || location<=questions.size()-1) {
+            question.selected = value;
+            questions.set(location, question);
+        }
+    }
+
     public int correct(){
         int n = 0;
-        for (Choice choice : choices){
-            if (choice.isCorrect())
+        for (Question question : questions){
+            if (question.isCorrect())
                 n++;
         }
 
@@ -30,7 +50,7 @@ public class Exam {
     }
 
     public double marks() {
-        int sz = choices.size();
+        int sz = questions.size();
         if (sz == 0)
             return 0;
 
@@ -41,41 +61,5 @@ public class Exam {
         return Math.floor(marks() * 100);
     }
 
-	public static Exam toObject(String jsonStr) throws JSONException{
-		JSONObject json = new JSONObject(jsonStr);
-		Exam q = new Exam();
-		//q.q = json.optString("q");
-		//q.b = json.optString("b");
-		//q.c = json.optString("c");
-		//q.rightAnswer = json.optString("r_a");
-		
-		return q;
-	}
-	
-	public static Exam toObject(JSONObject json) throws JSONException{
-		Exam q = new Exam();
-		if (json==null)
-			return q;
-		
-		q.id = json.optInt("id");
-		//q.q = q.loadFromJson(json.optString("q"));
-		//q.b = json.optString("b");//.replaceAll("\'", "\'\'");
-		//q.c = json.optString("c");//.replaceAll("\'", "\'\'");
-		//q.rightAnswer = json.optString("r_a");
-		
-		return q;
-	}
-	
-	public static List<Exam> loadFromJson(String jsonStr) throws JSONException{
-		List<Exam> list = new ArrayList<Exam>();
-		JSONObject jsonObj = new JSONObject(jsonStr);
-		JSONArray jArray = jsonObj.optJSONArray("data");
-		for (int i=0; i<jArray.length(); i++){
-			JSONObject json = jArray.getJSONObject(i);
-			list.add(Exam.toObject(json));
-		}
-		
-		return list;
-	}
 
 }

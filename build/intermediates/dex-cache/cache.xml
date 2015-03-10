@@ -2,6 +2,20 @@
 <items version="2" >
 
     <item
+        jar="/Users/spark/Projects/git/OurCommonBond/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/spark/Projects/git/OurCommonBond/app/build/intermediates/pre-dexed/debug/classes-b6d8c5a2d6e9f176e7d9247b29b5a853c4868d82.jar" />
+    </item>
+    <item
+        jar="/Users/spark/Projects/git/OurCommonBond/app/libs/ormlite-android-4.41.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d5ad2ad62e4d84198c08b012afdfaf75623fed8e">
+        <dex dex="/Users/spark/Projects/git/OurCommonBond/app/build/intermediates/pre-dexed/debug/ormlite-android-4.41-f40722aca1f39368402a6a3f9611aeb4a386ed48.jar" />
+    </item>
+    <item
         jar="/Users/spark/Projects/git/OurCommonBond/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -21,20 +35,6 @@
         revision="21.1.2"
         sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
         <dex dex="/Users/spark/Projects/git/OurCommonBond/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-fbbb71fed318af868f0d2af49128c765d28f4db3.jar" />
-    </item>
-    <item
-        jar="/Users/spark/Projects/git/OurCommonBond/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="/Users/spark/Projects/git/OurCommonBond/app/build/intermediates/pre-dexed/debug/classes-b6d8c5a2d6e9f176e7d9247b29b5a853c4868d82.jar" />
-    </item>
-    <item
-        jar="/Users/spark/Projects/git/OurCommonBond/app/libs/ormlite-android-4.41.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="d5ad2ad62e4d84198c08b012afdfaf75623fed8e">
-        <dex dex="/Users/spark/Projects/git/OurCommonBond/app/build/intermediates/pre-dexed/debug/ormlite-android-4.41-f40722aca1f39368402a6a3f9611aeb4a386ed48.jar" />
     </item>
 
 </items>

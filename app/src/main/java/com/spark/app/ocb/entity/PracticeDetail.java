@@ -1,7 +1,6 @@
 package com.spark.app.ocb.entity;
 
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * @author sunghun

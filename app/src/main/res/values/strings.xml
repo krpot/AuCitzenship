@@ -14,7 +14,10 @@
     <!-- Practice Activity -->
     <string name="before">Before</string>
     <string name="next">Next</string>
-    <string name="check_answer">Check answer</string>
+    <string name="another_go">Another go</string>
     <string name="finish">Finish</string>
+
+    <string name="key_index">Index</string>
+    <string name="key_answer">Answer</string>
 
 </resources>

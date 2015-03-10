@@ -1,4 +1,4 @@
-package com.spark.app.ocb;
+package com.spark.app.ocb.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,20 +13,17 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.dao.RawRowMapper;
+import com.spark.app.ocb.R;
 import com.spark.app.ocb.entity.Answer;
-import com.spark.app.ocb.entity.Exam;
 import com.spark.app.ocb.entity.Question;
+import com.spark.app.ocb.model.Exam;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.SysUtils;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 public class PracticeActivity extends Activity {
@@ -120,7 +117,6 @@ public class PracticeActivity extends Activity {
         radioC.setOnCheckedChangeListener(onCheckedChangeListener);
 
         radioAnswer = (RadioGroup)findViewById(R.id.radioAnswer);
-        //radioAnswer.setOnCheckedChangeListener(onCheckedChangeListener);
 
         btnNext     = (Button)findViewById(R.id.btnNext);
         btnAnothergo= (Button)findViewById(R.id.btnAnothergo);
@@ -136,10 +132,6 @@ public class PracticeActivity extends Activity {
             if (txtTitle.getTag() == null || !(txtTitle.getTag() instanceof Question)) return;
             Question question = (Question)txtTitle.getTag();
             Log.d(TAG, "##### Question:" + question);
-
-            //Answer a = (Answer)radioA.getTag(R.string.key_answer);
-            //if (!a.correct){
-            //}
 
             RadioButton button = (RadioButton)buttonView;
             if (button.getTag(R.string.key_answer) == null || !(button.getTag(R.string.key_answer) instanceof Answer)) return;
@@ -229,7 +221,9 @@ public class PracticeActivity extends Activity {
         }
 
         question.shuffle();
-		txtTitle.setText((mPosition + 1) + ". " + question.statement);
+
+        setTitle("Question " + (mPosition + 1) + " of " + mExam.questions.size());
+		txtTitle.setText(question.statement);
 		txtTitle.setTag(question);
         txtComment.setText("");
         btnNext.setEnabled(false);
@@ -265,17 +259,17 @@ public class PracticeActivity extends Activity {
     /*
      *
      */
-	private int generateQuestionId(int aStart, int aEnd, Random aRandom){
-	    if ( aStart > aEnd ) {
-	      throw new IllegalArgumentException("Start cannot exceed End.");
-	    }
-	    //get the range, casting to long to avoid overflow problems
-	    long range = (long)aEnd - (long)aStart + 1;
-	    // compute a fraction of the range, 0 <= frac < range
-	    long fraction = (long)(range * aRandom.nextDouble());
-	    int randomNumber =  (int)(fraction + aStart);    
-	    
-	    return randomNumber;
-	}
+//	private int generateQuestionId(int aStart, int aEnd, Random aRandom){
+//	    if ( aStart > aEnd ) {
+//	      throw new IllegalArgumentException("Start cannot exceed End.");
+//	    }
+//	    //get the range, casting to long to avoid overflow problems
+//	    long range = (long)aEnd - (long)aStart + 1;
+//	    // compute a fraction of the range, 0 <= frac < range
+//	    long fraction = (long)(range * aRandom.nextDouble());
+//	    int randomNumber =  (int)(fraction + aStart);
+//
+//	    return randomNumber;
+//	}
 
 }

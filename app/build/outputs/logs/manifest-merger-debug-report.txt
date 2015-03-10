@@ -59,7 +59,19 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:25:17
 	android:name
 		ADDED from AndroidManifest.xml:25:27
-activity#com.spark.app.ocb.PracticeActivity
+activity#com.spark.app.ocb.activity.PracticeActivity
 ADDED from AndroidManifest.xml:29:9
 	android:name
 		ADDED from AndroidManifest.xml:29:19
+activity#com.spark.app.ocb.activity.TestIntroActivity
+ADDED from AndroidManifest.xml:30:9
+	android:name
+		ADDED from AndroidManifest.xml:30:19
+activity#com.spark.app.ocb.activity.TestActivity
+ADDED from AndroidManifest.xml:31:9
+	android:name
+		ADDED from AndroidManifest.xml:31:19
+activity#com.spark.app.ocb.activity.TestResultActivity
+ADDED from AndroidManifest.xml:32:9
+	android:name
+		ADDED from AndroidManifest.xml:32:19

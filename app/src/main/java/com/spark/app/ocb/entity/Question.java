@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -46,6 +45,10 @@ public class Question{
         long seed = System.nanoTime();
         ArrayList<Answer> list = (ArrayList<Answer>) answers;
         Collections.shuffle(list, new Random(seed));
+    }
+
+    public boolean answered(){
+        return this.selected > -1;
     }
 
     @Override

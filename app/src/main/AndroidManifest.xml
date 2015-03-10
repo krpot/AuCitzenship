@@ -5,8 +5,8 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="15" />
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
     
      <uses-permission android:name="android.permission.INTERNET" />		
 
@@ -26,8 +26,11 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".PracticeActivity"></activity>
-        
+        <activity android:name=".activity.PracticeActivity"></activity>
+        <activity android:name=".activity.TestIntroActivity"></activity>
+        <activity android:name=".activity.TestActivity"></activity>
+        <activity android:name=".activity.TestResultActivity"></activity>
+
     </application>
 
 </manifest>

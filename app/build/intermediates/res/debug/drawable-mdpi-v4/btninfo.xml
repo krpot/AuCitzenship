@@ -17,7 +17,7 @@
         android:height="60dp"
         />
     <stroke
-        android:width="2dp"
+        android:width="1dp"
         android:color="#269ABC"
         />
 </shape><!-- From: file:/Users/spark/Projects/git/OurCommonBond/app/src/main/res/drawable-mdpi/btninfo.xml -->

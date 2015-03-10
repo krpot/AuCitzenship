@@ -281,6 +281,8 @@ public class TestActivity extends Activity {
      *
      */
     private void nextQuestion() {
+        if (mPosition<0 || mPosition > app.exam().questions.size()-1) return;
+
         Question question = app.exam().questions.get(mPosition);
         Log.d(TAG, "##### Next Question:" + question);
 

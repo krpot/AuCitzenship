@@ -73,10 +73,9 @@
       <file leaf-file-name="AnswerDao.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/spark/app/ocb/db/AnswerDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.90625" vertical-offset="135" max-vertical-offset="690">
-              <caret line="38" column="4" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.28125" vertical-offset="135" max-vertical-offset="690">
+              <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
               <folding>
-                <element signature="imports" expanded="true" />
                 <element signature="e#1200#1201#0" expanded="true" />
                 <element signature="e#1235#1236#0" expanded="true" />
               </folding>
@@ -945,6 +944,7 @@
     <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/res/drawable-mdpi" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
+    <property name="FullScreen" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -1118,6 +1118,9 @@
     <option name="analysisUIOptions">
       <AnalysisUIOptions />
     </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -1541,10 +1544,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/spark/app/ocb/db/AnswerDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.90625" vertical-offset="135" max-vertical-offset="690">
-          <caret line="38" column="4" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.28125" vertical-offset="135" max-vertical-offset="690">
+          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#1200#1201#0" expanded="true" />
             <element signature="e#1235#1236#0" expanded="true" />
           </folding>

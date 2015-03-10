@@ -36,5 +36,5 @@ public class AnswerDao extends BaseDaoImpl<Answer, Integer> {
         super(Answer.class);
     }
 
-    
+
 }

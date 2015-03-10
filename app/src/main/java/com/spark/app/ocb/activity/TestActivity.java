@@ -346,6 +346,8 @@ public class TestActivity extends Activity {
         if (mPosition != position)
             mPosition = position;
 
+        seekBar.setProgress(position);
+
         btnBefore.setEnabled(mPosition>0);
         btnNext.setEnabled(!isLastQuestion());
     }

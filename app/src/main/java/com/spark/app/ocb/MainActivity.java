@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -15,8 +16,11 @@ import com.spark.app.ocb.activity.TestActivity;
 import com.spark.app.ocb.activity.TestIntroActivity;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
+import com.spark.app.ocb.task.QuestionTask;
+import com.spark.app.ocb.task.TaskListener;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.FileUtils;
+import com.spark.app.ocb.util.PrefUtils;
 import com.spark.app.ocb.util.SysUtils;
 
 import org.json.JSONException;
@@ -29,10 +33,6 @@ import java.util.List;
 public class MainActivity extends Activity {
 	
 	private static final String TAG = "MainActivity";
-	private static final String QUESTION_PATH = "questions";
-
-	private Dao<Question, Integer> mQDao = null;
-	private Button btnPractice = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +78,44 @@ public class MainActivity extends Activity {
     }
 
     private void setupView(){
-		btnPractice = (Button)findViewById(R.id.btnPractice);
+		//btnPractice = (Button)findViewById(R.id.btnPractice);
 	}
 
     /*
      *
      */
 	private void loadData() {
+
+        Dao<Question, Integer> qDao = BeanUtils.getQuestionDao(this);
+        try {
+            boolean questionUpdated = PrefUtils.readBool(AppConstants.KEY_QUESTION_UPDATED);
+            if (questionUpdated) {
+                long count = qDao.countOf();
+                Log.d(TAG, "#####question.size:" + count);
+                questionUpdated = count > 0;
+            }
+
+            if (!questionUpdated){
+                QuestionTask questionTask = new QuestionTask(this, new TaskListener<List<Question>>(){
+                    @Override
+                    public void onError(Throwable th) {
+                        SysUtils.toast("Error while loading questions.");
+                    }
+
+                    @Override
+                    public void onComplete(List<Question> result) {
+                        PrefUtils.writeBool(AppConstants.KEY_QUESTION_UPDATED, true);
+                        Log.d(TAG, "========== QuestionTask onComplete ========");
+                    }
+                });
+                questionTask.execute();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        /******
 		if (mQDao==null)
 			mQDao = BeanUtils.getQuestionDao(this);
 
@@ -137,7 +168,7 @@ public class MainActivity extends Activity {
 		} finally {
 			if (in!=null) try {	in.close();	} catch (Exception e) {}
 		}
-		
+		******/
 	}
 	
 

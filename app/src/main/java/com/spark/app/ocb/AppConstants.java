@@ -1,7 +1,7 @@
 package com.spark.app.ocb;
 
 /**
- * Created by spark on 3/10/15.
+ * Created by spark
  */
 public class AppConstants {
 
@@ -12,4 +12,7 @@ public class AppConstants {
 
 
     public static final String EXTRA_DATA1 = "data1";
+
+
+    public static final String KEY_QUESTION_UPDATED = "question_updated";
 }

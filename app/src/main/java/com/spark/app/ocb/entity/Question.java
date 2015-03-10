@@ -68,6 +68,7 @@ public class Question{
         return "Question{" +
                 "id=" + id +
                 ", statement='" + statement + '\'' +
+                ", selected='" + selected + '\'' +
                 ", answers=" + (answers != null ? answers.size(): 0) +
                 '}';
     }

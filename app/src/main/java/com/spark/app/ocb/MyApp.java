@@ -6,6 +6,7 @@ import android.util.Log;
 import com.spark.app.ocb.model.Exam;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.DialogUtils;
+import com.spark.app.ocb.util.PrefUtils;
 import com.spark.app.ocb.util.SysUtils;
 
 public class MyApp extends Application {
@@ -26,6 +27,8 @@ public class MyApp extends Application {
         BeanUtils.context = this;
         DialogUtils.context = this;
         SysUtils.context = this;
+
+        PrefUtils.getInstance(this);
 
         Log.i(TAG, "============ onCreate()");
 	}

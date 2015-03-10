@@ -25,10 +25,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.spark.app.ocb.activity.PracticeActivity" />
-        <activity android:name="com.spark.app.ocb.activity.TestIntroActivity" />
-        <activity android:name="com.spark.app.ocb.activity.TestActivity" />
-        <activity android:name="com.spark.app.ocb.activity.TestResultActivity" />
+        <activity
+            android:name="com.spark.app.ocb.activity.PracticeActivity"
+            android:parentActivityName="com.spark.app.ocb.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.PracticeActivity" />
+        </activity>
+        <activity android:name="com.spark.app.ocb.activity.TestIntroActivity" >
+        </activity>
+        <activity
+            android:name="com.spark.app.ocb.activity.TestActivity"
+            android:parentActivityName="com.spark.app.ocb.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.TestActivity" />
+        </activity>
+        <activity android:name="com.spark.app.ocb.activity.TestResultActivity" >
+        </activity>
     </application>
 
 </manifest>

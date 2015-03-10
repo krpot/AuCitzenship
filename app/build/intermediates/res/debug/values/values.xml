@@ -15,15 +15,15 @@
     <string name="cancel">Cancel</string>
     <string name="confirm_submit_test">Are you sure to submit the test?</string>
     <string name="finish">Finish</string>
+    <string name="info">Information</string>
     <string name="key_answer">Answer</string>
     <string name="key_index">Index</string>
     <string name="menu_settings">Settings</string>
-    <string name="misc">Misc</string>
     <string name="next">Next</string>
     <string name="practice">Practice</string>
-    <string name="repeat">Repeat</string>
     <string name="review">Review</string>
     <string name="start">Start</string>
+    <string name="study">Study</string>
     <string name="submit">Submit</string>
     <string name="test">Test</string>
     <string name="test_intro">

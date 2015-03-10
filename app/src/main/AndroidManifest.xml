@@ -26,10 +26,23 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".activity.PracticeActivity"></activity>
-        <activity android:name=".activity.TestIntroActivity"></activity>
-        <activity android:name=".activity.TestActivity"></activity>
-        <activity android:name=".activity.TestResultActivity"></activity>
+        <activity android:name=".activity.PracticeActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.PracticeActivity" />
+        </activity>
+        <activity android:name=".activity.TestIntroActivity">
+        </activity>
+        <activity android:name=".activity.TestActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.TestActivity" />
+        </activity>
+        <activity android:name=".activity.TestResultActivity">
+
+        </activity>
 
     </application>
 

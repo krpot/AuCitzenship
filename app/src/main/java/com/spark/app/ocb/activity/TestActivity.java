@@ -1,5 +1,6 @@
 package com.spark.app.ocb.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,14 +14,16 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.RawRowMapper;
 import com.spark.app.ocb.AppConstants;
 import com.spark.app.ocb.R;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
+import com.spark.app.ocb.task.QuestionShuffleTask;
+import com.spark.app.ocb.task.TaskListener;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.DialogUtils;
 import com.spark.app.ocb.util.SysUtils;
@@ -39,6 +42,7 @@ public class TestActivity extends Activity {
     private RadioGroup radioAnswer;
     private RadioButton radioA, radioB, radioC;
     private Button btnNext, btnBefore, btnSubmit;
+    private SeekBar seekBar;
 
     private int mPosition = -1;
 
@@ -69,11 +73,11 @@ public class TestActivity extends Activity {
                     R.string.app_name,
                     R.string.alert_test_finished,
                     new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    showTestResult();
-                }
-            });
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            showTestResult();
+                        }
+                    });
         }
     };
 
@@ -88,9 +92,6 @@ public class TestActivity extends Activity {
 
         setupView();
         generateQuestions();
-        onButtonClick(btnNext);
-
-        mTimer.start();
     }
 
     @Override
@@ -141,6 +142,9 @@ public class TestActivity extends Activity {
     }
 
     private void setupView(){
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         txtTitle = (TextView)findViewById(android.R.id.text1);
         txtComment = (TextView)findViewById(R.id.txtComment);
 
@@ -158,7 +162,32 @@ public class TestActivity extends Activity {
         btnNext     = (Button)findViewById(R.id.btnNext);
         btnSubmit   = (Button)findViewById(R.id.btnSubmit);
 
+        seekBar     = (SeekBar)findViewById(R.id.seekBar);
+        seekBar.setOnSeekBarChangeListener(onSeekBarChangeListener);
+
     }
+
+    private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener(){
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
+            if (fromUser){
+                mPosition = position;
+                nextQuestion();
+                seekBar.setProgress(position);
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    };
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener(){
 
@@ -190,6 +219,32 @@ public class TestActivity extends Activity {
         if (mQDao==null)
             mQDao = BeanUtils.getQuestionDao(this);
 
+        QuestionShuffleTask task = new QuestionShuffleTask(this, mQDao, new TaskListener<List<Question>>() {
+            @Override
+            public void onError(Throwable th) {
+                Log.d(TAG, "========= QuestionShuffleTask onError =========");
+                SysUtils.toast("Error while generating questions.");
+            }
+
+            @Override
+            public void onComplete(List<Question> result) {
+                Log.d(TAG, "========= QuestionShuffleTask onComplete =========" + result);
+                if (result != null && !result.isEmpty()) {
+                    app.exam().questions = result;
+
+                    seekBar.setMax(result.size());
+                    seekBar.setProgress(0);
+
+                    onButtonClick(btnNext);
+                    mTimer.start();
+                }
+            }
+        });
+
+        task.execute(20);
+
+
+        /*
         Question question = null;
         List<Question> questionList = null;
         try {
@@ -219,6 +274,7 @@ public class TestActivity extends Activity {
             e.printStackTrace();
             SysUtils.toast("Load data error.");
         }
+        */
     }
 
     /*
@@ -228,20 +284,23 @@ public class TestActivity extends Activity {
         Question question = app.exam().questions.get(mPosition);
         Log.d(TAG, "##### Next Question:" + question);
 
-        try {
-            Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(this);
-            question.answers = answerDao.queryBuilder()
-                    .where()
-                    .eq("question_id", question.id)
-                    .query();
+        if (question.answers==null || question.answers.isEmpty()) {
+            Log.d(TAG, "---------- nextQuestion / Load answers ---------");
+            try {
+                Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(this);
+                question.answers = answerDao.queryBuilder()
+                        .where()
+                        .eq("question_id", question.id)
+                        .query();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            SysUtils.toast("Display question error.");
-            return;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                SysUtils.toast("Display question error.");
+                return;
+            }
+
+            question.shuffle();
         }
-
-        question.shuffle();
 
         setTitle("Question " + (mPosition + 1) + " of " + app.exam().questions.size());
         txtTitle.setText(question.statement);
@@ -257,6 +316,11 @@ public class TestActivity extends Activity {
             radioButton.setText(answer.answer);
             radioButton.setTag(R.string.key_index, i);
             radioButton.setTag(R.string.key_answer, answer);
+
+            if (question.selected>=0 && i == question.selected){
+                radioButton.setChecked(true);
+            }
+
             i++;
         }
 

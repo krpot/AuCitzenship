@@ -3,14 +3,22 @@
 
     <string name="app_name">OurCommonBond</string>
     <string name="menu_settings">Settings</string>
-    
+
+    <!-- SplashActivity -->
+    <string name="check_update">Checking update</string>
+    <string name="no_update">No update</string>
+    <string name="download_update">Downloading update</string>
+    <string name="error_download">Error download data</string>
+    <string name="download_completed">Download completed</string>
+    <string name="error_apply">Error apply data</string>
+
     <!-- Main Activity -->
-    <string name="review">Review</string>
-    <string name="repeat">Repeat</string>
-    <string name="test">Test</string>
-    <string name="misc">Misc</string>
     <string name="practice">Practice</string>
-    
+    <string name="test">Test</string>
+    <string name="study">Study</string>
+    <string name="review">Review</string>
+    <string name="info">Information</string>
+
     <!-- Practice Activity -->
     <string name="before">Before</string>
     <string name="next">Next</string>
@@ -42,6 +50,7 @@
     <string name="confirm_submit_test">Are you sure to submit the test?</string>
     <string name="alert_not_answered">There is a question you have not answered.</string>
     <string name="alert_not_answered_plural">There are questions you have not answered.</string>
+    <string name="alert_test_finished">Test finished.</string>
 
     <array name="tabs">
         <item>Summary</item>

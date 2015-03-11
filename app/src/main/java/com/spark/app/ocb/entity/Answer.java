@@ -58,8 +58,8 @@ public class Answer {
         if (json==null)
             return answer;
 
-        answer.answer = json.optString("answer");
-        answer.correct = json.optBoolean("correct");
+        answer.answer = json.optString("t");
+        answer.correct = json.optBoolean("r");
         answer.question = question;
         return answer;
     }

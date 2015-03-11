@@ -22,10 +22,16 @@ import java.util.Random;
 public class Question{
 
     @DatabaseField(generatedId = true)
-    public int id = -1;
+    public int id = -1;             //question Id
 
     @DatabaseField
-    public String statement;
+    public String statement;        //question statement
+
+    @DatabaseField
+    public String tag;              //tag strings
+
+    @DatabaseField
+    public String reference;        //reference verse Id in the book eg.01010101 - first part, first chapter, first unit, first verse
 
     @ForeignCollectionField
     public Collection<Answer> answers = new ArrayList<Answer>();
@@ -68,6 +74,7 @@ public class Question{
         return "Question{" +
                 "id=" + id +
                 ", statement='" + statement + '\'' +
+                ", selected='" + selected + '\'' +
                 ", answers=" + (answers != null ? answers.size(): 0) +
                 '}';
     }
@@ -78,8 +85,9 @@ public class Question{
 			return q;
 		
 		//q.id = json.optInt("id");
-		q.statement = json.optString("statement");
-        JSONArray jAnswers = json.optJSONArray("answers");
+		q.statement = json.optString("q");
+        q.tag       = json.optString("t");
+        JSONArray jAnswers = json.optJSONArray("a");
         for (int i=0; i<jAnswers.length(); i++) {
             Answer a = Answer.toObject(jAnswers.getJSONObject(i), q);
             q.answers.add(a);

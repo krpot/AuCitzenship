@@ -10,6 +10,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
+import com.spark.app.ocb.model.Updates;
 
 import java.sql.SQLException;
 
@@ -84,7 +85,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
 		}
 		return mAnswerDao;
 	}
-	
+
 	/**
 	 * Close the database connections and clear any cached DAOs.
 	 */

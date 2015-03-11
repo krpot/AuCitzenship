@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
@@ -224,4 +225,23 @@ public class SysUtils {
 
         return randomNumber;
     }
+
+
+    /*
+     *
+     */
+    public static String baseNameFromUrl(String url){
+        if (TextUtils.isEmpty(url)) return "";
+
+        String s = url;
+        int pos = url.lastIndexOf('/');
+
+        if (pos>0){
+            s = url.substring(pos+1);
+        }
+
+        return s;
+    }
+
+
 }

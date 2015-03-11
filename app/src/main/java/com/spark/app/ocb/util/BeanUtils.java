@@ -7,6 +7,7 @@ import com.j256.ormlite.dao.Dao;
 import com.spark.app.ocb.db.DbHelper;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
+import com.spark.app.ocb.model.Updates;
 
 import java.sql.SQLException;
 
@@ -56,5 +57,6 @@ public class BeanUtils {
 
 		return mAnswerDao;
 	}
-	
+
+
 }

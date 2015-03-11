@@ -37,12 +37,12 @@ public class DialogUtils {
 	/**
 	 * @param msg
 	 */
-	public static void alert(Context context, String title, String msg)
+	public static void alert(Context context, String title, String msg, DialogInterface.OnClickListener yesClickListener)
 	{
 		int iconId = 0;
 		AlertDialog.Builder dlg = new AlertDialog.Builder(context);		
 		dlg.setMessage(msg);
-		dlg.setPositiveButton(getResStr(android.R.string.ok), null);		
+		dlg.setPositiveButton(getResStr(android.R.string.ok), yesClickListener);
 		dlg.setTitle(title);		
 		dlg.setIcon(iconId);		
 		dlg.create();
@@ -53,9 +53,9 @@ public class DialogUtils {
 	 * @param titleId
 	 * @param msgId
 	 */
-	public static void alertResStr(Context context, int titleId, int msgId)
+	public static void alertResStr(Context context, int titleId, int msgId, DialogInterface.OnClickListener yesClickListener)
 	{
-		alert(context, getResStr(titleId), getResStr(msgId));
+		alert(context, getResStr(titleId), getResStr(msgId), yesClickListener);
 	}
 
 	/**

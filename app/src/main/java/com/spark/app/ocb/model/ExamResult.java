@@ -12,6 +12,7 @@ public class ExamResult {
     public int correct;
     public int wrong;
     public int unanswered;
+    public long elapsed;
 
     private Exam exam;
 
@@ -24,6 +25,14 @@ public class ExamResult {
         this.unanswered = unanswered;
     }
 
+    public ExamResult(int total, int correct, int wrong, int unanswered, long elapsed){
+        this.total = total;
+        this.correct = correct;
+        this.wrong = wrong;
+        this.unanswered = unanswered;
+        this.elapsed = elapsed/1000L;
+    }
+
     public double marks() {
         if (total == 0)
             return 0;
@@ -32,7 +41,7 @@ public class ExamResult {
     }
 
     public int markRatio() {
-        return (int)(marks() * 100);
+        return (int)Math.floor(marks() * 100);
     }
 
     public static ExamResult newInstance(Exam exam){
@@ -52,7 +61,7 @@ public class ExamResult {
             }
         }
 
-        return new ExamResult(total, correct, wrong, unanswered);
+        return new ExamResult(total, correct, wrong, unanswered, exam.elapsed);
     }
 }
 

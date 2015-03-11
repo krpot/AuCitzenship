@@ -29,49 +29,69 @@ uses-permission#android.permission.INTERNET
 ADDED from AndroidManifest.xml:11:6
 	android:name
 		ADDED from AndroidManifest.xml:11:23
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:12:6
+	android:name
+		ADDED from AndroidManifest.xml:12:23
 application
-ADDED from AndroidManifest.xml:13:5
+ADDED from AndroidManifest.xml:14:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
 	android:label
-		ADDED from AndroidManifest.xml:17:9
-	android:allowBackup
-		ADDED from AndroidManifest.xml:15:9
-	android:icon
-		ADDED from AndroidManifest.xml:16:9
-	android:theme
 		ADDED from AndroidManifest.xml:18:9
+	android:allowBackup
+		ADDED from AndroidManifest.xml:16:9
+	android:icon
+		ADDED from AndroidManifest.xml:17:9
+	android:theme
+		ADDED from AndroidManifest.xml:19:9
 	android:name
-		ADDED from AndroidManifest.xml:14:9
-activity#com.spark.app.ocb.MainActivity
-ADDED from AndroidManifest.xml:19:9
+		ADDED from AndroidManifest.xml:15:9
+activity#com.spark.app.ocb.activity.SplashActivity
+ADDED from AndroidManifest.xml:20:9
 	android:label
+		ADDED from AndroidManifest.xml:22:13
+	android:name
 		ADDED from AndroidManifest.xml:21:13
-	android:name
-		ADDED from AndroidManifest.xml:20:13
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:22:13
+ADDED from AndroidManifest.xml:23:13
 action#android.intent.action.MAIN
-ADDED from AndroidManifest.xml:23:17
+ADDED from AndroidManifest.xml:24:17
 	android:name
-		ADDED from AndroidManifest.xml:23:25
+		ADDED from AndroidManifest.xml:24:25
 category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:25:17
 	android:name
 		ADDED from AndroidManifest.xml:25:27
-activity#com.spark.app.ocb.activity.PracticeActivity
+activity#com.spark.app.ocb.activity.MainActivity
 ADDED from AndroidManifest.xml:29:9
+	android:label
+		ADDED from AndroidManifest.xml:31:13
 	android:name
-		ADDED from AndroidManifest.xml:29:19
+		ADDED from AndroidManifest.xml:30:13
+activity#com.spark.app.ocb.activity.PracticeActivity
+ADDED from AndroidManifest.xml:34:9
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:35:13
+	android:name
+		ADDED from AndroidManifest.xml:34:19
+meta-data#android.support.PARENT_ACTIVITY
+ADDED from AndroidManifest.xml:36:13
+	android:name
+		ADDED from AndroidManifest.xml:37:17
+	android:value
+		ADDED from AndroidManifest.xml:38:17
 activity#com.spark.app.ocb.activity.TestIntroActivity
-ADDED from AndroidManifest.xml:30:9
+ADDED from AndroidManifest.xml:40:9
 	android:name
-		ADDED from AndroidManifest.xml:30:19
+		ADDED from AndroidManifest.xml:40:19
 activity#com.spark.app.ocb.activity.TestActivity
-ADDED from AndroidManifest.xml:31:9
+ADDED from AndroidManifest.xml:42:9
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:43:13
 	android:name
-		ADDED from AndroidManifest.xml:31:19
+		ADDED from AndroidManifest.xml:42:19
 activity#com.spark.app.ocb.activity.TestResultActivity
-ADDED from AndroidManifest.xml:32:9
+ADDED from AndroidManifest.xml:48:9
 	android:name
-		ADDED from AndroidManifest.xml:32:19
+		ADDED from AndroidManifest.xml:48:19

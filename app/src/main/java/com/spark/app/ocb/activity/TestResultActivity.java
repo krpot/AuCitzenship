@@ -7,9 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.Html;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -48,28 +50,34 @@ public class TestResultActivity extends FragmentActivity implements ActionBar.Ta
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                this.finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Click event handler for buttons
      * @param view
      */
     public void onButtonClick(View view){
         switch(view.getId()){
-            case R.id.btnBefore:
+            case R.id.btnFinish:
+                this.finish();
                 break;
 
-            case R.id.btnSubmit:
+            case R.id.btnAnothergo:
                 break;
         }
 
     }
 
     private void setupView() {
-//        txtTitle = (TextView)findViewById(android.R.id.text1);
-//        txtComment = (TextView)findViewById(R.id.txtComment);
-//        btnBefore   = (Button)findViewById(R.id.btnBefore);
-//        btnNext     = (Button)findViewById(R.id.btnNext);
-//        btnSubmit   = (Button)findViewById(R.id.btnSubmit);
-
         ActionBar actionBar = getActionBar();
 
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -104,7 +112,7 @@ public class TestResultActivity extends FragmentActivity implements ActionBar.Ta
                     mReviewFragment = new ReviewFragment();
 
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, mSummaryFragment)
+                        .replace(R.id.container, mReviewFragment)
                         .commit();
                 break;
         }
@@ -140,7 +148,8 @@ public class TestResultActivity extends FragmentActivity implements ActionBar.Ta
               .append("<h4>Score: ").append(result.correct).append("</h4>")
               .append("<h4>Wrong: ").append(result.wrong).append("</h4>")
               .append("<h4>Marks: ").append(result.markRatio()).append("%</h4>")
-              .append("<h4>Unanswered: ").append(result.unanswered).append("</h4>");
+              .append("<h4>Unanswered: ").append(result.unanswered).append("</h4>")
+              .append("<h4>Time spent: ").append(DateUtils.formatElapsedTime(result.elapsed)).append("</h4>");
             txtSummary.setText(Html.fromHtml(sb.toString()));
 
             return rootView;
@@ -163,6 +172,5 @@ public class TestResultActivity extends FragmentActivity implements ActionBar.Ta
 
             return rootView;
         }
-
     }
 }

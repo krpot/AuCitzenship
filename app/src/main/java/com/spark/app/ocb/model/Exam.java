@@ -11,10 +11,15 @@ import java.util.List;
  */
 public class Exam {
 
-	public int id = -1;
     public List<Question> questions = new ArrayList<Question>();
+    public long elapsed = 0L;
 
 	public Exam(){}
+
+    public void clear(){
+        questions.clear();
+        elapsed = 0;
+    }
 
     public boolean addQuestion(Question question){
         if (!questions.contains(question)) {
@@ -22,6 +27,12 @@ public class Exam {
         }
 
         return false;
+    }
+
+    public Question getQuestion(int pos){
+        if (questions.isEmpty() || pos<0 || pos >questions.size()-1) return null;
+
+        return questions.get(pos);
     }
 
     public void setSelected(Question question, int value){

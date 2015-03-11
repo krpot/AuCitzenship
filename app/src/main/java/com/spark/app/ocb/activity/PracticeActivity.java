@@ -1,5 +1,6 @@
 package com.spark.app.ocb.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Html;
@@ -13,18 +14,17 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.RawRowMapper;
 import com.spark.app.ocb.R;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.model.Exam;
+import com.spark.app.ocb.task.QuestionShuffleTask;
+import com.spark.app.ocb.task.TaskListener;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.SysUtils;
 
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class PracticeActivity extends Activity {
 	
@@ -36,10 +36,9 @@ public class PracticeActivity extends Activity {
 	private RadioButton radioA, radioB, radioC;
     private Button btnNext, btnAnothergo, btnFinish;
 	
-	private Set<Integer> mQuestionIds = new HashSet<Integer>();
     private Exam mExam = new Exam();
 
-	private int mQuestoinId, mPosition = -1;
+	private int mPosition = -1;
 	
 
 	@Override
@@ -49,7 +48,6 @@ public class PracticeActivity extends Activity {
 		
 		setupView();
         generateQuestions();
-        onButtonClick(btnNext);
 	}
 
 	@Override
@@ -105,6 +103,9 @@ public class PracticeActivity extends Activity {
 	}
 
 	private void setupView(){
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
 		txtTitle = (TextView)findViewById(android.R.id.text1);
 		txtComment = (TextView)findViewById(R.id.txtComment);
 
@@ -169,6 +170,27 @@ public class PracticeActivity extends Activity {
         if (mQDao==null)
             mQDao = BeanUtils.getQuestionDao(this);
 
+        QuestionShuffleTask task = new QuestionShuffleTask(this, mQDao, new TaskListener<List<Question>>() {
+            @Override
+            public void onError(Throwable th) {
+                Log.d(TAG, "========= QuestionShuffleTask onError =========");
+                SysUtils.toast("Error while generating questions.");
+            }
+
+            @Override
+            public void onComplete(List<Question> result) {
+                Log.d(TAG, "========= QuestionShuffleTask onComplete =========" + result);
+                if (result != null && !result.isEmpty()) {
+                    mExam.questions = result;
+                    onButtonClick(btnNext);
+                }
+            }
+        });
+
+        task.execute(20);
+
+
+        /*
         Question question = null;
         List<Question> questionList = null;
         try {
@@ -198,6 +220,7 @@ public class PracticeActivity extends Activity {
             e.printStackTrace();
             SysUtils.toast("Load data error.");
         }
+        */
     }
 
     /*
@@ -207,20 +230,23 @@ public class PracticeActivity extends Activity {
         Question question = mExam.questions.get(mPosition);
         Log.d(TAG, "##### Next Question:" + question);
 
-        try {
-            Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(this);
-            question.answers = answerDao.queryBuilder()
-                     .where()
-                     .eq("question_id", question.id)
-                     .query();
+        if (question.answers==null || question.answers.isEmpty()) {
+            Log.d(TAG, "---------- nextQuestion / Load answers ---------");
+            try {
+                Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(this);
+                question.answers = answerDao.queryBuilder()
+                        .where()
+                        .eq("question_id", question.id)
+                        .query();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            SysUtils.toast("Load data error.");
-            return;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                SysUtils.toast("Load data error.");
+                return;
+            }
+
+            question.shuffle();
         }
-
-        question.shuffle();
 
         setTitle("Question " + (mPosition + 1) + " of " + mExam.questions.size());
 		txtTitle.setText(question.statement);
@@ -238,6 +264,11 @@ public class PracticeActivity extends Activity {
             radioButton.setText(answer.answer);
             radioButton.setTag(R.string.key_index, i);
             radioButton.setTag(R.string.key_answer, answer);
+
+            if (question.selected>=0 && i == question.selected){
+                radioButton.setChecked(true);
+            }
+
             i++;
         }
 
@@ -255,21 +286,5 @@ public class PracticeActivity extends Activity {
 
         return null;
     }
-
-    /*
-     *
-     */
-//	private int generateQuestionId(int aStart, int aEnd, Random aRandom){
-//	    if ( aStart > aEnd ) {
-//	      throw new IllegalArgumentException("Start cannot exceed End.");
-//	    }
-//	    //get the range, casting to long to avoid overflow problems
-//	    long range = (long)aEnd - (long)aStart + 1;
-//	    // compute a fraction of the range, 0 <= frac < range
-//	    long fraction = (long)(range * aRandom.nextDouble());
-//	    int randomNumber =  (int)(fraction + aStart);
-//
-//	    return randomNumber;
-//	}
 
 }

@@ -19,16 +19,23 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:onClick="onButtonClick"
-            android:text="@string/practice" />
+            android:text="@string/practice"
+            android:singleLine="false"
+            android:background="@drawable/btninfo"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnNext"
+            android:id="@+id/btnTest"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/review"
-            android:onClick="onButtonClick" />
+            android:text="@string/test"
+            android:onClick="onButtonClick"
+            android:background="@drawable/btninfo"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
     </TableRow>
 
@@ -38,22 +45,28 @@
         android:layout_weight="1" >
 
         <Button
-            android:id="@+id/btnTest"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="@string/test"
-            android:onClick="onButtonClick" />
-
-        <Button
             android:id="@+id/button4"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/repeat"
-            android:onClick="onButtonClick" />
+            android:text="@string/study"
+            android:onClick="onButtonClick"
+            android:background="@drawable/btninfo"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="@string/review"
+            android:onClick="onButtonClick"
+            android:background="@drawable/btninfo"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
     </TableRow>
 
@@ -68,8 +81,11 @@
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/misc"
-            android:onClick="onButtonClick" />
+            android:text="@string/info"
+            android:onClick="onButtonClick"
+            android:background="@drawable/btninfo"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button6"
@@ -77,8 +93,11 @@
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/misc"
-            android:onClick="onButtonClick" />
+            android:text="@string/menu_settings"
+            android:onClick="onButtonClick"
+            android:background="@drawable/btninfo"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
     </TableRow>
     
@@ -89,10 +108,14 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:gravity="center"
+            android:background="@drawable/alertsuccess"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:visibility="gone" />
         
     </LinearLayout>
 

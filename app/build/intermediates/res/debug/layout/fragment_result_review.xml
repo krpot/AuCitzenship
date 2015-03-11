@@ -10,47 +10,9 @@
     <TextView
         android:id="@+id/txtComment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:background="@drawable/well"
         android:text="Review" />
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-
-        <Button
-            android:id="@+id/btnNext"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onButtonClick"
-            android:text="@string/next"
-            android:background="@drawable/btndefault"
-            android:layout_margin="2dp" />
-
-        <Button
-            android:id="@+id/btnAnothergo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onButtonClick"
-            android:text="@string/another_go"
-            android:background="@drawable/btndefault"
-            android:layout_margin="2dp"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btnFinish"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onButtonClick"
-            android:text="@string/finish"
-            android:background="@drawable/btndefault"
-            android:layout_margin="2dp" />
-
-    </LinearLayout>
 
 </LinearLayout><!-- From: file:/Users/spark/Projects/git/OurCommonBond/app/src/main/res/layout/fragment_result_review.xml -->

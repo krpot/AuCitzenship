@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import com.j256.ormlite.dao.Dao;
 import com.spark.app.ocb.activity.PracticeActivity;
+import com.spark.app.ocb.activity.SplashActivity;
 import com.spark.app.ocb.activity.TestActivity;
 import com.spark.app.ocb.activity.TestIntroActivity;
 import com.spark.app.ocb.entity.Answer;
@@ -40,7 +41,10 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		setupView();
-		loadData();
+		//***loadData();
+
+        Intent intent = new Intent(this, SplashActivity.class);
+        startActivity(intent);
 	}
 
 	@Override

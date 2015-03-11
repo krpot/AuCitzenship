@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.RadioButton;
 
 import com.j256.ormlite.dao.Dao;
-import com.spark.app.ocb.R;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.model.Exam;

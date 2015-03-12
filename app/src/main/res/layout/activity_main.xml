@@ -45,7 +45,7 @@
         android:layout_weight="1" >
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/btnStudy"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
@@ -57,7 +57,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnNext"
+            android:id="@+id/btnReview"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
@@ -76,7 +76,7 @@
         android:layout_weight="1" >
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/btnInfo"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
@@ -88,12 +88,12 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/btnShare"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/menu_settings"
+            android:text="@string/share"
             android:onClick="onButtonClick"
             android:background="@drawable/btninfo"
             android:textColor="#FFFFFF"

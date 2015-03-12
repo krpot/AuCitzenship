@@ -3,6 +3,9 @@ package com.spark.app.ocb.task;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.spark.app.ocb.util.FileUtils;
+import com.spark.app.ocb.util.SysUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,37 +22,40 @@ import java.util.Map;
 /**
  * Created by sunghun
  */
-public class DownloadTask extends AsyncTask<String, String, List<String>> {
+public class DownloadTask extends AsyncTask<String, String, Map<String, String>> {
 
     private static final String TAG = "DownloadTask";
 
-    TaskListener<List<String>> mListener;
+    TaskListener<Map<String, String>> mListener;
 
-    public DownloadTask(TaskListener<List<String>> listener){
+    public DownloadTask(TaskListener<Map<String, String>> listener){
         this.mListener = listener;
     }
 
     @Override
-    protected List<String> doInBackground(String... urls) {
+    protected Map<String, String> doInBackground(String... urls) {
         if (urls.length == 0)
             return null;
 
         Map<String, String> resultMap = new HashMap<String, String>();
-        List<String> results = new ArrayList<String>();
+
+        //List<String> results = new ArrayList<String>();
         for (String url: urls) {
 
-            Log.d(TAG, "========== DownloadTask: " + url);
-            //resultMap(url, download(url));
-            results.add(download(url));
+            String key = FileUtils.baseNameWithoutExt(SysUtils.baseNameFromUrl(url));
+
+            Log.d(TAG, "========== DownloadTask: " + url + ", baseName=" + key);
+            resultMap.put(key, download(url));
+            //results.add(download(url));
         }
 
-        return results;
+        return resultMap;
     }
 
     @Override
-    protected void onPostExecute(List<String> list) {
+    protected void onPostExecute(Map<String, String> map) {
         if (mListener != null)
-            mListener.onComplete(list);
+            mListener.onComplete(map);
     }
 
     private String download(String fileName){
@@ -63,20 +69,7 @@ public class DownloadTask extends AsyncTask<String, String, List<String>> {
             //conn.setConnectTimeout();
             //conn.setReadTimeout();
 
-            StringBuffer sb = new StringBuffer();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String line = null;
-            while ((line = br.readLine()) != null){
-                sb.append(line);
-            }
-
-            Log.d(TAG, "#### read:" + sb.toString());
-
-            br.close();
-
-            return sb.toString();
+            return FileUtils.readTextFile(conn.getInputStream());
 
         } catch (Exception e) {
             e.printStackTrace();

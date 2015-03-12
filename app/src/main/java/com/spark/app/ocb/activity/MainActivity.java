@@ -1,4 +1,4 @@
-package com.spark.app.ocb;
+package com.spark.app.ocb.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.j256.ormlite.dao.Dao;
+import com.spark.app.ocb.AppConstants;
+import com.spark.app.ocb.R;
 import com.spark.app.ocb.activity.PracticeActivity;
 import com.spark.app.ocb.activity.SplashActivity;
 import com.spark.app.ocb.activity.TestActivity;
@@ -42,9 +44,6 @@ public class MainActivity extends Activity {
 		
 		setupView();
 		//***loadData();
-
-        Intent intent = new Intent(this, SplashActivity.class);
-        startActivity(intent);
 	}
 
 	@Override

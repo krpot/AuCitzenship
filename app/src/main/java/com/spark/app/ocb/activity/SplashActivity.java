@@ -6,10 +6,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
 import com.spark.app.ocb.AppConstants;
@@ -30,18 +32,20 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SplashActivity extends Activity {
 	
 	private static final String TAG = "SplashActivity";
+    private static final int SPLASH_TIMEOUT = 2000;
 
-    private boolean listUpdated;
     private ProgressBar spinner;
+    private TextView txtIntro;
 
     private Dao<Question, Integer> qDao;
     private Dao<Answer, Integer> aDao;
 
-    DownloadService mDownloadService;
+    //DownloadService mDownloadService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,21 +64,12 @@ public class SplashActivity extends Activity {
 		return true;
 	}
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        //if (mDownloadService.isRegistered())
-            //unregisterReceiver(mDownloadReceiver);
-    }
-
+    /*
+     *
+     */
     private void setupView(){
         spinner = (ProgressBar)findViewById(R.id.spinner);
+        txtIntro = (TextView)findViewById(R.id.txtIntro);
 	}
 
     /*
@@ -82,72 +77,49 @@ public class SplashActivity extends Activity {
      */
 	private void checkIfThereAreUpdates() {
 
-        //boolean updated = PrefUtils.readBool(AppConstants.KEY_QUESTION_UPDATED);
-        //if (updated) return;
-
         spinner.setVisibility(View.VISIBLE);
+
+        txtIntro.setText(R.string.check_update);
 
         //mDownloadService = new DownloadService(this, mDownloadReceiver);
         //mDownloadService.startDownload("http://www.janeart.net/citizen/questions/update.json", "ocbupdate.json", "OcbUpdate");
 
-        DownloadTask task = new DownloadTask(new TaskListener<List<String>>() {
+        DownloadTask task = new DownloadTask(new TaskListener<Map<String, String>>() {
             @Override
             public void onError(Throwable th) {
-                SysUtils.toast("Error while downloading.\n" + th.getMessage());
+                txtIntro.setText(R.string.error_download);
+                startMainActivity();
             }
 
             @Override
-            public void onComplete(List<String> result) {
+            public void onComplete(Map<String, String> result) {
                 Log.d(TAG, "========== Update list onComplete: " + result);
 
                 if (result != null && !result.isEmpty()) {
 
                     try {
-                        Log.d(TAG, "######: " + result.get(0));
-                        String[] urls = updatesList(result.get(0));
+                        String s = result.get("update");
+                        Log.d(TAG, "######: " + s);
+                        String[] urls = updatesList(s);
                         spinner.setVisibility(View.GONE);
 
-                        updateQuestionsFromServer(urls);
+                        if (urls.length == 0){
+                            Log.d(TAG, "######: No update list!!! ");
+                            txtIntro.setText(R.string.no_update);
+                            startMainActivity();
+                        } else {
+                            updateQuestionsFromServer(urls);
+                        }
 
                     } catch (RuntimeException e) {
                         spinner.setVisibility(View.GONE);
-                        SysUtils.toast("Error while parsing data.\n" + e.getMessage());
+                        txtIntro.setText(R.string.error_apply);
+                        startMainActivity();
                     }
                 }
             }
         });
-        task.execute("http://www.janeart.net/citizen/questions/update.json");
-
-        /*
-        Dao<Question, Integer> qDao = BeanUtils.getQuestionDao(this);
-        try {
-            boolean questionUpdated = PrefUtils.readBool(AppConstants.KEY_QUESTION_UPDATED);
-            if (questionUpdated) {
-                long count = qDao.countOf();
-                Log.d(TAG, "#####question.size:" + count);
-                questionUpdated = count > 0;
-            }
-
-            if (!questionUpdated){
-                QuestionTask questionTask = new QuestionTask(this, new TaskListener<List<Question>>(){
-                    @Override
-                    public void onError(Throwable th) {
-                        SysUtils.toast("Error while loading questions.");
-                    }
-
-                    @Override
-                    public void onComplete(List<Question> result) {
-                        PrefUtils.writeBool(AppConstants.KEY_QUESTION_UPDATED, true);
-                        Log.d(TAG, "========== QuestionTask onComplete ========");
-                    }
-                });
-                questionTask.execute();
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        */
+        task.execute(AppConstants.QUESTION_UPDATE_URL);
 	}
 
     private String[] updatesList(String json){
@@ -163,9 +135,11 @@ public class SplashActivity extends Activity {
                 Updates u = Updates.toObject(jo);
 
                 String version = PrefUtils.readString(u.fileName);
+                Log.d(TAG, "#### Current version:" + version);
                 if (version.compareTo(u.version)<0) {
-                    String url = "http://www.janeart.net/citizen/questions/" + u.fileName + ".json";
+                    String url = AppConstants.QUESTION_URL + u.fileName + ".json";
                     urls.add(url);
+                    PrefUtils.writeString(u.fileName + "_temp", u.version);
                 }
             }
 
@@ -180,20 +154,24 @@ public class SplashActivity extends Activity {
     private void updateQuestionsFromServer(final String... urls) {
         Log.d(TAG, "========== updateQuestionsFromServer: " + urls);
 
-        if (urls.length == 0) return;
+        txtIntro.setText(R.string.download_update);
 
         spinner.setVisibility(View.VISIBLE);
 
-        DownloadTask task = new DownloadTask(new TaskListener<List<String>>() {
+        DownloadTask task = new DownloadTask(new TaskListener<Map<String, String>>() {
 
             @Override
             public void onError(Throwable th) {
-                SysUtils.toast("Error while downloading.\n" + th.getMessage());
+                txtIntro.setText(R.string.error_download);
+                startMainActivity();
+                //SysUtils.toast("Error while downloading.\n" + th.getMessage());
             }
 
             @Override
-            public void onComplete(List<String> result) {
+            public void onComplete(Map<String, String> result) {
                 Log.d(TAG, "========== Question onComplete: " + result);
+
+                txtIntro.setText(R.string.download_completed);
 
                 if (result != null && !result.isEmpty()) {
 
@@ -205,17 +183,22 @@ public class SplashActivity extends Activity {
                         aDao.deleteBuilder().clear();
                         qDao.deleteBuilder().clear();
 
-                        for (String json : result) {
-                            saveQuestion(json);
-                            //PrefUtils.writeString(u.fileName);
+                        for (Map.Entry<String, String> entry: result.entrySet()) {
+                            saveQuestion(entry.getValue());
+                            String version = PrefUtils.readString(entry.getKey() + "_temp");
+                            PrefUtils.writeString(entry.getKey(), version);
+
+                            Log.d(TAG, "#### New version:" + PrefUtils.readString(entry.getKey()));
                         }
 
                     } catch (RuntimeException e) {
-                        SysUtils.toast("Error while parsing data.\n" + e.getMessage());
+                        txtIntro.setText(R.string.error_apply);
+                        //SysUtils.toast("Error while parsing data.\n" + e.getMessage());
                     }
                 }
 
                 spinner.setVisibility(View.GONE);
+                startMainActivity();
             }
         });
         task.execute(urls);
@@ -242,42 +225,56 @@ public class SplashActivity extends Activity {
         }
     }
 
-    private void downloadCompleted(DownloadInfo downloadInfo){
-
-        if (downloadInfo != null) {
-            if (downloadInfo.status != DownloadManager.STATUS_SUCCESSFUL) {
-                SysUtils.toast(downloadInfo.getStatusMessage() + " " + downloadInfo.getErrorMessage());
-            } else {
-
-                //downloadInfo.localFileName
-                //mDownloadService.startDownload();
+    /*
+     *
+     */
+    private void startMainActivity(){
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run(){
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
-        }
-
-        spinner.setVisibility(View.GONE);
+        }, SPLASH_TIMEOUT);
     }
 
-    private BroadcastReceiver mDownloadReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)){
+//    private void downloadCompleted(DownloadInfo downloadInfo){
+//
+//        if (downloadInfo != null) {
+//            if (downloadInfo.status != DownloadManager.STATUS_SUCCESSFUL) {
+//                SysUtils.toast(downloadInfo.getStatusMessage() + " " + downloadInfo.getErrorMessage());
+//            } else {
+//
+//                //downloadInfo.localFileName
+//                //mDownloadService.startDownload();
+//            }
+//        }
+//
+//        spinner.setVisibility(View.GONE);
+//    }
 
-                DownloadInfo info = null;
-                long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0L);
-                if ( id != mDownloadService.getDownloadId()){
-                    Log.d(TAG, "Different download ID. Skip.");
-                } else {
-                    info = mDownloadService.queryDownloadInfo();
-                }
-
-                downloadCompleted(info);
-
-            } else if (DownloadManager.ACTION_NOTIFICATION_CLICKED.equals(action)){
-                DownloadInfo info = mDownloadService.queryDownloadInfo();
-                Log.d(TAG, "##### Downloaded:" + info);
-            }
-        }
-    };
+//    private BroadcastReceiver mDownloadReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            String action = intent.getAction();
+//            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)){
+//
+//                DownloadInfo info = null;
+//                long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0L);
+//                if ( id != mDownloadService.getDownloadId()){
+//                    Log.d(TAG, "Different download ID. Skip.");
+//                } else {
+//                    info = mDownloadService.queryDownloadInfo();
+//                }
+//
+//                downloadCompleted(info);
+//
+//            } else if (DownloadManager.ACTION_NOTIFICATION_CLICKED.equals(action)){
+//                DownloadInfo info = mDownloadService.queryDownloadInfo();
+//                Log.d(TAG, "##### Downloaded:" + info);
+//            }
+//        }
+//    };
 
 }

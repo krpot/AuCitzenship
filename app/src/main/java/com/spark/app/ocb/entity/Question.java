@@ -73,6 +73,7 @@ public class Question{
     public String toString() {
         return "Question{" +
                 "id=" + id +
+                ", tag='" + tag + '\'' +
                 ", statement='" + statement + '\'' +
                 ", selected='" + selected + '\'' +
                 ", answers=" + (answers != null ? answers.size(): 0) +
@@ -106,14 +107,19 @@ public class Question{
 		return list;
 	}
 
-    public boolean isCorrect(){
-        int i = -1;
-        for (Answer answer: this.answers){
-            i++;
-            if (answer.correct) break;
-        }
-
-        return (i>0 && i == selected);
+    public boolean isValidSelected(){
+        return selected>=0 && selected<this.answers.size();
     }
 
+    public boolean isCorrect(){
+        if (isValidSelected()){
+            return getAnswers().get(selected).correct;
+        }
+
+        return false;
+    }
+
+    public ArrayList<Answer> getAnswers(){
+        return (ArrayList<Answer>) answers;
+    }
 }

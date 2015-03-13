@@ -25,6 +25,8 @@ import com.spark.app.ocb.util.SysUtils;
 import java.sql.SQLException;
 import java.util.List;
 
+import static com.spark.app.ocb.MyApp.app;
+
 /**
  * Created by sunghun
  */
@@ -33,19 +35,26 @@ public class QuizService {
     private static final String TAG ="QuizService";
 
     public static final int MSG_LOAD_FINISHED = 20002;
+
     public static final int MSG_CHANGED = 20003;
     public static final int MSG_SELECTED = 20004;
     public static final int MSG_ERROR = 29999;
-
     Context mContext;
+
     Exam mExam;
     int mPosition = -1;
     Handler mHandler;
 
-    public QuizService(Context context, Handler handler){
+    Dao<Question, Integer> mQDao = null;
+    Dao<Answer, Integer> mAnswerDao  = null;
+
+    public QuizService(Context context, Exam exam, Handler handler){
         mContext = context;
-        mExam = new Exam();
+        mExam = exam;
         mHandler = handler;
+
+        mQDao = BeanUtils.getQuestionDao(mContext);
+        mAnswerDao = BeanUtils.getAnswerDao(mContext);
     }
 
     public void goToPrior(){
@@ -55,8 +64,7 @@ public class QuizService {
             return;
         }
 
-        mPosition = pos;
-        goTo(mPosition);
+        setPosition(pos);
     }
 
     public void goToNext(){
@@ -66,38 +74,40 @@ public class QuizService {
             return;
         }
 
-        mPosition = pos;
-        goTo(mPosition);
+        setPosition(pos);
     }
 
     public void goToFirst(){
-        mPosition = 0;
-        goTo(mPosition);
+        setPosition(0);
     }
+
     /*
      *
      */
     private void goTo(int pos) {
         Question question = mExam.getQuestion(pos);
         Log.d(TAG, "##### Next Question:" + question);
-
-        if (question.answers==null || question.answers.isEmpty()) {
-            Log.d(TAG, "---------- goTo / Load answers ---------");
-            try {
-                Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(mContext);
-                question.answers = answerDao.queryBuilder()
-                        .where()
-                        .eq("question_id", question.id)
-                        .query();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                SysUtils.toast("Load data error.");
-                return;
-            }
-
-            question.shuffle();
-        }
+//        if (question == null) {
+//            return;
+//        }
+//
+//        if (question.answers==null || question.answers.isEmpty()) {
+//            Log.d(TAG, "---------- goTo / Load answers ---------");
+//            try {
+//                Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(mContext);
+//                question.answers = answerDao.queryBuilder()
+//                        .where()
+//                        .eq("question_id", question.id)
+//                        .query();
+//
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//                SysUtils.toast("Load data error.");
+//                return;
+//            }
+//
+//            question.shuffle();
+//        }
 
         sendMessage(MSG_CHANGED, pos, 0, question);
 
@@ -108,17 +118,18 @@ public class QuizService {
         return mPosition;
     }
 
+    public void setPosition(int position){
+        mPosition = position;
+        goTo(position);
+    }
+
     /*
      *
      */
     public void start() {
         mPosition = -1;
 
-        Dao<Question, Integer> mQDao = null;
-        if (mQDao==null)
-            mQDao = BeanUtils.getQuestionDao(mContext);
-
-        QuestionShuffleTask task = new QuestionShuffleTask(mContext, mQDao, new TaskListener<List<Question>>() {
+        QuestionShuffleTask task = new QuestionShuffleTask(mContext, new TaskListener<List<Question>>() {
             @Override
             public void onError(Throwable th) {
                 Log.d(TAG, "========= QuestionShuffleTask onError =========");
@@ -139,15 +150,28 @@ public class QuizService {
         task.execute(20);
     }
 
+    public int unAnswered(){
+        int unanswered = 0;
+
+        for (Question question : mExam.questions){
+            if (question == null && question.selected<0)
+                unanswered++;
+        }
+
+        return unanswered;
+    }
+
     public Question currentQuestion(){
         return mExam.getQuestion(mPosition);
     }
 
     public int total(){
-        Question q = currentQuestion();
-        return q != null ? q.answers.size() : 0;
+        return mExam.questions.size();
     }
 
+    public boolean isFirst(){
+        return mPosition == 0;
+    }
     public boolean isLast(){
         return mPosition >= mExam.questions.size()-1;
     }

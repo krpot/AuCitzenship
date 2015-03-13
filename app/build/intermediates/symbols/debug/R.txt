@@ -46,6 +46,7 @@ int layout activity_test_result 0x7f030005
 int layout fragment_result_review 0x7f030006
 int layout fragment_result_summary 0x7f030007
 int layout question_item 0x7f030008
+int layout test_result_item 0x7f030009
 int menu activity_main 0x7f070000
 int string alert_not_answered 0x7f050000
 int string alert_not_answered_plural 0x7f050001

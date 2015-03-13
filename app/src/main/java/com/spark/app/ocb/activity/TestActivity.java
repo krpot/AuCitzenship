@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -19,9 +22,11 @@ import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
 import com.spark.app.ocb.AppConstants;
+import com.spark.app.ocb.MyApp;
 import com.spark.app.ocb.R;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
+import com.spark.app.ocb.service.QuizService;
 import com.spark.app.ocb.task.QuestionShuffleTask;
 import com.spark.app.ocb.task.TaskListener;
 import com.spark.app.ocb.util.BeanUtils;
@@ -37,14 +42,45 @@ public class TestActivity extends Activity {
 
     private static final String TAG = "TestActivity";
 
-    private Dao<Question, Integer> mQDao;
     private TextView txtTitle, txtComment;
     private RadioGroup radioAnswer;
-    private RadioButton radioA, radioB, radioC;
+    private RadioButton[] answerButtons;
     private Button btnNext, btnBefore, btnSubmit;
     private SeekBar seekBar;
 
-    private int mPosition = -1;
+    private QuizService quizService;
+
+    //----------------------------------------------------
+    //
+    // Handler for QuizService
+    //----------------------------------------------------
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case QuizService.MSG_CHANGED:
+                    Log.d(TAG, "##### MSG_CHANGED:" + msg.arg1 + ", question:" + msg.obj);
+                    displayQuestion((Question)msg.obj);
+                    break;
+
+                case QuizService.MSG_LOAD_FINISHED:
+                    Log.d(TAG, "##### MSG_LOAD_FINISHED:" + msg.obj);
+                    quizService.goToFirst();
+                    mTimer.start();
+
+                    break;
+
+                case QuizService.MSG_SELECTED:
+                    Log.d(TAG, "##### MSG_SELECTED:" + msg.arg1 + ", Question:" + msg.obj);
+                    checkAnswer((Question)msg.obj);
+                    break;
+
+                case QuizService.MSG_ERROR:
+                    Log.d(TAG, "##### MSG_ERROR:" + msg.obj);
+                    break;
+            }
+        }
+    };
 
     //----------------------------------------------------
     //
@@ -91,7 +127,11 @@ public class TestActivity extends Activity {
         setContentView(R.layout.activity_test);
 
         setupView();
-        generateQuestions();
+
+        quizService = new QuizService(this, MyApp.app.exam(), mHandler);
+        quizService.start();
+
+        //generateQuestions();
     }
 
     @Override
@@ -115,23 +155,11 @@ public class TestActivity extends Activity {
     public void onButtonClick(View view){
         switch(view.getId()){
             case R.id.btnBefore:
-                if (mPosition<=0){
-                    SysUtils.toast("Begin of the questions.");
-                    return;
-                }
-
-                setPosition(--mPosition);
-                nextQuestion();
+                quizService.goToPrior();
                 break;
 
             case R.id.btnNext:
-                if (mPosition>=19){
-                    SysUtils.toast("End of the questions.");
-                    return;
-                }
-
-                setPosition(++mPosition);
-                nextQuestion();
+                quizService.goToNext();
                 break;
 
             case R.id.btnSubmit:
@@ -141,6 +169,21 @@ public class TestActivity extends Activity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AppConstants.REQUEST_MODAL){
+            switch (resultCode){
+                case Activity.RESULT_CANCELED:
+                    finish();
+                    break;
+                case Activity.RESULT_OK:
+                    app.exam().clear();
+                    quizService.start();
+                    break;
+            }
+        }
+    }
+
     private void setupView(){
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -148,13 +191,15 @@ public class TestActivity extends Activity {
         txtTitle = (TextView)findViewById(android.R.id.text1);
         txtComment = (TextView)findViewById(R.id.txtComment);
 
-        radioA = (RadioButton)findViewById(R.id.radioa);
-        radioB = (RadioButton)findViewById(R.id.radiob);
-        radioC = (RadioButton)findViewById(R.id.radioc);
+        answerButtons = new RadioButton[3];
+        answerButtons[0] = (RadioButton)findViewById(R.id.radioa);
+        answerButtons[1] = (RadioButton)findViewById(R.id.radiob);
+        answerButtons[2] = (RadioButton)findViewById(R.id.radioc);
 
-        radioA.setOnCheckedChangeListener(onCheckedChangeListener);
-        radioB.setOnCheckedChangeListener(onCheckedChangeListener);
-        radioC.setOnCheckedChangeListener(onCheckedChangeListener);
+        for (int i=0, sz=answerButtons.length; i<sz; i++){
+            answerButtons[i].setTag(i);
+            answerButtons[i].setOnCheckedChangeListener(onCheckedChangeListener);
+        }
 
         radioAnswer = (RadioGroup)findViewById(R.id.radioAnswer);
 
@@ -167,214 +212,237 @@ public class TestActivity extends Activity {
 
     }
 
+    //----------------------------------------------------
+    //
+    // Seekbar listener
+    //----------------------------------------------------
     private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener(){
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
             if (fromUser){
-                mPosition = position;
-                nextQuestion();
+                quizService.setPosition(position);
                 seekBar.setProgress(position);
             }
         }
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-
         }
     };
 
+    //----------------------------------------------------
+    //
+    // When tapping answer radiobox
+    //----------------------------------------------------
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener(){
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (!isChecked) return;
 
-            if (txtTitle.getTag() == null || !(txtTitle.getTag() instanceof Question)) return;
-            Question question = (Question)txtTitle.getTag();
-            Log.d(TAG, "##### Question:" + question);
+            Question q = quizService.currentQuestion();
+            if (q == null) return;
 
-            RadioButton button = (RadioButton)buttonView;
-            if (button.getTag(R.string.key_answer) == null || !(button.getTag(R.string.key_answer) instanceof Answer)) return;
-            Answer answer = (Answer)button.getTag(R.string.key_answer);
-            Log.d(TAG, "##### Answer:" + answer);
+            RadioButton button = (RadioButton) buttonView;
+            int selected = (Integer) button.getTag();
+            quizService.selectAnswer(selected);
 
-            int selected = (Integer)button.getTag(R.string.key_index);
-            app.exam().setSelected(question, selected);
+//            if (txtTitle.getTag() == null || !(txtTitle.getTag() instanceof Question)) return;
+//            Question question = (Question)txtTitle.getTag();
+//            Log.d(TAG, "##### Question:" + question);
+//
+//            RadioButton button = (RadioButton)buttonView;
+//            if (button.getTag(R.string.key_answer) == null || !(button.getTag(R.string.key_answer) instanceof Answer)) return;
+//            Answer answer = (Answer)button.getTag(R.string.key_answer);
+//            Log.d(TAG, "##### Answer:" + answer);
+//
+//            int selected = (Integer)button.getTag(R.string.key_index);
+//            app.exam().setSelected(question, selected);
         }
     };
 
     /*
      *
      */
-    private void generateQuestions() {
-        setPosition(-1);
-        app.exam().clear();
+    private void checkAnswer(Question q){
+//        boolean correct = q.isCorrect();
 
-        if (mQDao==null)
-            mQDao = BeanUtils.getQuestionDao(this);
-
-        QuestionShuffleTask task = new QuestionShuffleTask(this, mQDao, new TaskListener<List<Question>>() {
-            @Override
-            public void onError(Throwable th) {
-                Log.d(TAG, "========= QuestionShuffleTask onError =========");
-                SysUtils.toast("Error while generating questions.");
-            }
-
-            @Override
-            public void onComplete(List<Question> result) {
-                Log.d(TAG, "========= QuestionShuffleTask onComplete =========" + result);
-                if (result != null && !result.isEmpty()) {
-                    app.exam().questions = result;
-
-                    seekBar.setMax(result.size());
-                    seekBar.setProgress(0);
-
-                    onButtonClick(btnNext);
-                    mTimer.start();
-                }
-            }
-        });
-
-        task.execute(20);
-
-
-        /*
-        Question question = null;
-        List<Question> questionList = null;
-        try {
-            String sql = "SELECT * FROM questions ORDER BY RANDOM() LIMIT 20";
-            questionList = mQDao.queryRaw(sql,
-                    new RawRowMapper<Question>(){
-                        @Override
-                        public Question mapRow(String[] strings, String[] strings2) throws SQLException {
-                            Question q = new Question();
-                            for (int i=0, sz=strings.length; i<sz; i++) {
-                                String column = strings[i];
-                                String value = strings2[i];
-                                if ("id".equals(column)) q.id = Integer.valueOf(value);
-                                if ("statement".equals(column)) q.statement = value;
-                            }
-
-                            return q;
-                        }
-                    }).getResults();
-
-
-            if (questionList == null || questionList.isEmpty()) return;
-
-            app.exam().questions = questionList;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            SysUtils.toast("Load data error.");
-        }
-        */
+//        String html = "";
+//        btnNext.setEnabled(correct);
+//        if (correct) {
+//            html = "<p>Correct! </p>";
+//
+//            //if (quizService.isLast()) {
+//            //    btnNext.setVisibility(View.GONE);
+//            //}
+//        } else {
+//            html = "<p><font color='red'>Wrong! Try again.</font> </p>";
+//        }
+//
+//        txtComment.setText(Html.fromHtml(html));
     }
 
     /*
      *
      */
-    private void nextQuestion() {
-        Question question = app.exam().getQuestion(mPosition);
-        Log.d(TAG, "##### Next Question:" + question);
+    private void displayQuestion(Question question){
+        if (question == null || question.answers==null) return;
 
-        if (question == null) return;
+        Log.d(TAG, "##### displayQuestion / " + question);
 
-        if (question.answers==null || question.answers.isEmpty()) {
-            Log.d(TAG, "---------- nextQuestion / Load answers ---------");
-            try {
-                Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(this);
-                question.answers = answerDao.queryBuilder()
-                        .where()
-                        .eq("question_id", question.id)
-                        .query();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                SysUtils.toast("Display question error.");
-                return;
-            }
-
-            question.shuffle();
-        }
-
-        setTitle("Question " + (mPosition + 1) + " of " + app.exam().questions.size());
+        setTitle("Question " + (quizService.getPosition() + 1) + " of " + quizService.total());
         txtTitle.setText(question.statement);
-        txtTitle.setTag(question);
+        txtComment.setText("");
+        btnNext.setEnabled(false);
         radioAnswer.clearCheck();
+
+        seekBar.setProgress(quizService.getPosition());
+
+        btnBefore.setEnabled(!quizService.isFirst());
+        btnNext.setEnabled(!quizService.isLast());
 
         Log.d(TAG, "##### Question.Answer.size:" + question.answers.size());
 
         int i=0;
         for (Answer answer : question.answers){
             Log.d(TAG, "##### question.answer:" + answer);
-            RadioButton radioButton = (RadioButton)radioAnswer.getChildAt(i);
+            if (i>=answerButtons.length) break;
+
+            RadioButton radioButton = answerButtons[i++];
             radioButton.setText(answer.answer);
-            radioButton.setTag(R.string.key_index, i);
-            radioButton.setTag(R.string.key_answer, answer);
-
-            if (question.selected>=0 && i == question.selected){
-                radioButton.setChecked(true);
-            }
-
-            i++;
         }
 
-    }
-
-    private boolean isLastQuestion(){
-        return (!app.exam().questions.isEmpty()) && (mPosition >= ( app.exam().questions.size()-1));
-    }
-
-    private Question currentQuestion(){
-        if (app.exam() == null) return null;
-
-        if (mPosition>=0 && mPosition<=app.exam().questions.size()-1)
-            return app.exam().questions.get(mPosition);
-
-        return null;
+        if (question.selected>=0 && question.selected<question.answers.size()){
+            answerButtons[question.selected].setChecked(true);
+        }
     }
 
     /*
      *
      */
-    private void setPosition(int position){
-        if (mPosition != position)
-            mPosition = position;
+//    private void generateQuestions() {
+//        setPosition(-1);
+//        app.exam().clear();
+//
+//        if (mQDao==null)
+//            mQDao = BeanUtils.getQuestionDao(this);
+//
+//        QuestionShuffleTask task = new QuestionShuffleTask(this, mQDao, new TaskListener<List<Question>>() {
+//            @Override
+//            public void onError(Throwable th) {
+//                Log.d(TAG, "========= QuestionShuffleTask onError =========");
+//                SysUtils.toast("Error while generating questions.");
+//            }
+//
+//            @Override
+//            public void onComplete(List<Question> result) {
+//                Log.d(TAG, "========= QuestionShuffleTask onComplete =========" + result);
+//                if (result != null && !result.isEmpty()) {
+//                    app.exam().questions = result;
+//
+//                    seekBar.setMax(result.size());
+//                    seekBar.setProgress(0);
+//
+//                    onButtonClick(btnNext);
+//                    mTimer.start();
+//                }
+//            }
+//        });
+//
+//        task.execute(20);
+//    }
+//
+//    /*
+//     *
+//     */
+//    private void nextQuestion() {
+//        Question question = app.exam().getQuestion(mPosition);
+//        Log.d(TAG, "##### Next Question:" + question);
+//
+//        if (question == null) return;
+//
+//        if (question.answers==null || question.answers.isEmpty()) {
+//            Log.d(TAG, "---------- nextQuestion / Load answers ---------");
+//            try {
+//                Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(this);
+//                question.answers = answerDao.queryBuilder()
+//                        .where()
+//                        .eq("question_id", question.id)
+//                        .query();
+//
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//                SysUtils.toast("Display question error.");
+//                return;
+//            }
+//
+//            question.shuffle();
+//        }
+//
+//        setTitle("Question " + (mPosition + 1) + " of " + app.exam().questions.size());
+//        txtTitle.setText(question.statement);
+//        txtTitle.setTag(question);
+//        radioAnswer.clearCheck();
+//
+//        Log.d(TAG, "##### Question.Answer.size:" + question.answers.size());
+//
+//        int i=0;
+//        for (Answer answer : question.answers){
+//            Log.d(TAG, "##### question.answer:" + answer);
+//            RadioButton radioButton = (RadioButton)radioAnswer.getChildAt(i);
+//            radioButton.setText(answer.answer);
+//            radioButton.setTag(R.string.key_index, i);
+//            radioButton.setTag(R.string.key_answer, answer);
+//
+//            if (question.selected>=0 && i == question.selected){
+//                radioButton.setChecked(true);
+//            }
+//
+//            i++;
+//        }
+//
+//    }
+//
+//    private boolean isLastQuestion(){
+//        return (!app.exam().questions.isEmpty()) && (mPosition >= ( app.exam().questions.size()-1));
+//    }
+//
+//    private Question currentQuestion(){
+//        if (app.exam() == null) return null;
+//
+//        if (mPosition>=0 && mPosition<=app.exam().questions.size()-1)
+//            return app.exam().questions.get(mPosition);
+//
+//        return null;
+//    }
 
-        seekBar.setProgress(position);
-
-        btnBefore.setEnabled(mPosition>0);
-        btnNext.setEnabled(!isLastQuestion());
-    }
+    /*
+     *
+     */
+//    private void setPosition(int position){
+//        if (mPosition != position)
+//            mPosition = position;
+//
+//        seekBar.setProgress(position);
+//
+//        btnBefore.setEnabled(mPosition>0);
+//        btnNext.setEnabled(!isLastQuestion());
+//    }
 
     /*
      *
      */
     private void submitTest(){
-        int answered = 0;
-
         String msg = "";
-        for (Question question : app.exam().questions){
-            if (question ==  null) return;
+        int unanswered = quizService.unAnswered();
 
-            if (question.selected<0)
-                answered++;
-        }
-
-        if (answered == 0){
-            showTestResult();
-            return;
-        }
-
-        if (answered>0){
-            msg += getString(answered > 1 ? R.string.alert_not_answered_plural : R.string.alert_not_answered);
+        if (unanswered>0){
+            msg += getString(unanswered > 1 ? R.string.alert_not_answered_plural : R.string.alert_not_answered);
         }
 
         msg += "\n" + getString(R.string.confirm_submit_test);
@@ -382,6 +450,7 @@ public class TestActivity extends Activity {
         DialogUtils.confirm(this, msg, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                mTimer.cancel();
                 showTestResult();
             }
         });
@@ -390,8 +459,7 @@ public class TestActivity extends Activity {
 
     private void showTestResult(){
         Intent intent = new Intent(TestActivity.this, TestResultActivity.class);
-        startActivity(intent);
-
-        finish();
+        startActivityForResult(intent, AppConstants.REQUEST_MODAL);
+        //finish();
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/ianpark/projects/mobile/OurCommonBond/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/spark/Projects/git/OurCommonBond/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <array name="tabs">
         <item>Summary</item>
@@ -48,7 +48,7 @@
         ]]>
     </string>
     <string name="test_result">Test result</string>
-    <!-- From: file:/Users/ianpark/projects/mobile/OurCommonBond/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/spark/Projects/git/OurCommonBond/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!--

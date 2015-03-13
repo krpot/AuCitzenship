@@ -7,6 +7,11 @@
     android:padding="5dp"
     tools:context=".MainActivity" >
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@android:id/list" />
+
     <TextView
         android:id="@+id/txtComment"
         android:layout_width="match_parent"
@@ -15,4 +20,4 @@
         android:background="@drawable/well"
         android:text="Review" />
 
-</LinearLayout><!-- From: file:/Users/ianpark/projects/mobile/OurCommonBond/app/src/main/res/layout/fragment_result_review.xml -->
+</LinearLayout><!-- From: file:/Users/spark/Projects/git/OurCommonBond/app/src/main/res/layout/fragment_result_review.xml -->

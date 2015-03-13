@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RawRowMapper;
+import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.service.QuizService;
 import com.spark.app.ocb.util.BeanUtils;
@@ -22,12 +23,14 @@ public class QuestionShuffleTask extends AsyncTask<Integer, List<Question>, List
 
     Context mContext;
     Dao<Question, Integer> mDao;
+    Dao<Answer, Integer> mAnswerDao;
     TaskListener<List<Question>> mListener;
 
 
-    public QuestionShuffleTask(Context context, Dao<Question, Integer> dao, TaskListener<List<Question>> listener){
+    public QuestionShuffleTask(Context context, TaskListener<List<Question>> listener){
         mContext = context;
-        mDao = dao;
+        mDao = BeanUtils.getQuestionDao(context);
+        mAnswerDao = BeanUtils.getAnswerDao(context);
         mListener = listener;
     }
 
@@ -60,10 +63,11 @@ public class QuestionShuffleTask extends AsyncTask<Integer, List<Question>, List
                                 if ("statement".equals(column)) q.statement = value;
                             }
 
+                            shuffleAnswers(q);
+
                             return q;
                         }
                     }).getResults();
-
 
             return questionList;
 
@@ -77,4 +81,14 @@ public class QuestionShuffleTask extends AsyncTask<Integer, List<Question>, List
         return Collections.emptyList();
     }
 
+    private void shuffleAnswers(Question question) throws SQLException{
+        if (question == null) return;
+
+        question.answers = mAnswerDao.queryBuilder()
+                .where()
+                .eq("question_id", question.id)
+                .query();
+
+        question.shuffle();
+    }
 }

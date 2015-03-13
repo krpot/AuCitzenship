@@ -65,6 +65,7 @@ public final class R {
         public static final int fragment_result_review=0x7f030006;
         public static final int fragment_result_summary=0x7f030007;
         public static final int question_item=0x7f030008;
+        public static final int test_result_item=0x7f030009;
     }
     public static final class menu {
         public static final int activity_main=0x7f070000;

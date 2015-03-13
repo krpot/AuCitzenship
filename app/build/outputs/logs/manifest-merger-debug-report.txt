@@ -87,11 +87,9 @@ ADDED from AndroidManifest.xml:40:9
 		ADDED from AndroidManifest.xml:40:19
 activity#com.spark.app.ocb.activity.TestActivity
 ADDED from AndroidManifest.xml:42:9
-	android:parentActivityName
-		ADDED from AndroidManifest.xml:43:13
 	android:name
 		ADDED from AndroidManifest.xml:42:19
 activity#com.spark.app.ocb.activity.TestResultActivity
-ADDED from AndroidManifest.xml:48:9
+ADDED from AndroidManifest.xml:49:9
 	android:name
-		ADDED from AndroidManifest.xml:48:19
+		ADDED from AndroidManifest.xml:49:19

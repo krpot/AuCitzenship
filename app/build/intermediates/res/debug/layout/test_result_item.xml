@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@android:id/text1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Question"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="13dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@android:id/text2"
+        android:layout_gravity="center_horizontal"
+        android:autoText="false"
+        android:layout_marginTop="2dp"
+        android:textSize="11dp" />
+
+</LinearLayout><!-- From: file:/Users/spark/Projects/git/OurCommonBond/app/src/main/res/layout/test_result_item.xml -->

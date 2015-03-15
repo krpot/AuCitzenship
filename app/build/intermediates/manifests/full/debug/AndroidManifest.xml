@@ -48,6 +48,13 @@
         <!-- </activity> -->
         <activity android:name="com.spark.app.ocb.activity.TestResultActivity" >
         </activity>
+        <activity
+            android:name="com.spark.app.ocb.activity.TextbookActivity"
+            android:parentActivityName="com.spark.app.ocb.activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.TextbookActivity" />
+        </activity>
     </application>
 
 </manifest>

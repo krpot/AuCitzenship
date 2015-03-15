@@ -54,6 +54,10 @@ public class MainActivity extends Activity {
                 Intent intent2 = new Intent(this, TestIntroActivity.class);
                 startActivityForResult(intent2, AppConstants.REQUEST_MODAL);
                 break;
+            case R.id.btnStudy:
+                Intent intent3 = new Intent(this, TextbookActivity.class);
+                startActivity(intent3);
+                break;
         }
 	}
 

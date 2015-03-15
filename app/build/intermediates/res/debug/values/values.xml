@@ -14,6 +14,7 @@
     <string name="before">Before</string>
     <string name="cancel">Cancel</string>
     <string name="check_update">Checking update</string>
+    <string name="confirm_exit_test">Are you sure to exit the test?</string>
     <string name="confirm_submit_test">Are you sure to submit the test?</string>
     <string name="download_completed">Download completed</string>
     <string name="download_update">Downloading update</string>

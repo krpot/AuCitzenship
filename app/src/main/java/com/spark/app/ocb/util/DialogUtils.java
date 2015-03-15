@@ -96,18 +96,19 @@ public class DialogUtils {
 	/**
 	 * @param msg
 	 */
-	public static AlertDialog confirm(Context context, String msg, DialogInterface.OnClickListener yesClickListener)
+	public static AlertDialog confirm(Context context, String msg, final DialogInterface.OnClickListener clickListener)
 	{
 		String sTitle = "Confirm";
 		int iconId = android.R.drawable.ic_menu_help;
 		
 		AlertDialog.Builder dlg = new AlertDialog.Builder(context);		
 		dlg.setMessage(msg);
-		dlg.setPositiveButton(android.R.string.yes, yesClickListener);		
+		dlg.setPositiveButton(android.R.string.yes, clickListener);
 		dlg.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
+                clickListener.onClick(dialog, which);
 			}
 		});
 		dlg.setTitle(sTitle);		
@@ -116,9 +117,9 @@ public class DialogUtils {
 		return dlg.show();
 	}
 	
-	public static AlertDialog confirm(Context context, int msgId, DialogInterface.OnClickListener yesClickListener)
+	public static AlertDialog confirm(Context context, int msgId, DialogInterface.OnClickListener clickListener)
 	{
-		return confirm(context, getResStr(msgId), yesClickListener);
+		return confirm(context, getResStr(msgId), clickListener);
 	}	
 	
 	/**

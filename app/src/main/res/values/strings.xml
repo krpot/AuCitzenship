@@ -48,6 +48,7 @@
         ]]>
     </string>
 
+    <string name="confirm_exit_test">Are you sure to exit the test?</string>
     <string name="confirm_submit_test">Are you sure to submit the test?</string>
     <string name="alert_not_answered">There is a question you have not answered.</string>
     <string name="alert_not_answered_plural">There are questions you have not answered.</string>

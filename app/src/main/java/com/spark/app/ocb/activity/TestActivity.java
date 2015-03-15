@@ -4,14 +4,15 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -20,21 +21,15 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.j256.ormlite.dao.Dao;
 import com.spark.app.ocb.AppConstants;
 import com.spark.app.ocb.MyApp;
 import com.spark.app.ocb.R;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.service.QuizService;
-import com.spark.app.ocb.task.QuestionShuffleTask;
-import com.spark.app.ocb.task.TaskListener;
-import com.spark.app.ocb.util.BeanUtils;
+import com.spark.app.ocb.util.CountDownTimerWithPause;
 import com.spark.app.ocb.util.DialogUtils;
 import com.spark.app.ocb.util.SysUtils;
-
-import java.sql.SQLException;
-import java.util.List;
 
 import static com.spark.app.ocb.MyApp.app;
 
@@ -65,8 +60,10 @@ public class TestActivity extends Activity {
 
                 case QuizService.MSG_LOAD_FINISHED:
                     Log.d(TAG, "##### MSG_LOAD_FINISHED:" + msg.obj);
+
+                    txtComment.setTextColor(Color.BLACK);
                     quizService.goToFirst();
-                    mTimer.start();
+                    mTimer.create();
 
                     break;
 
@@ -86,7 +83,7 @@ public class TestActivity extends Activity {
     //
     // CountDownTimer
     //----------------------------------------------------
-    private CountDownTimer mTimer = new CountDownTimer(AppConstants.TEST_MINUTE, 1000){
+    private CountDownTimerWithPause mTimer = new CountDownTimerWithPause(AppConstants.TEST_MINUTE, 1000, true){
 
         @Override
         public void onTick(long millisUntilFinished) {
@@ -94,6 +91,10 @@ public class TestActivity extends Activity {
 
             long seconds = millisUntilFinished/1000L;
             txtComment.setText("Time left: " + DateUtils.formatElapsedTime(seconds));
+            //if it has less than one minute left
+            if (seconds<=(5*60)){
+                txtComment.setTextColor(Color.RED);
+            }
 
             int minutes = (int)(seconds /60);
             if (minutes <= 10 && (minutes % 3 == 0)) {
@@ -130,8 +131,6 @@ public class TestActivity extends Activity {
 
         quizService = new QuizService(this, MyApp.app.exam(), mHandler);
         quizService.start();
-
-        //generateQuestions();
     }
 
     @Override
@@ -146,6 +145,24 @@ public class TestActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            mTimer.pause();
+            DialogUtils.confirm(this, R.string.confirm_exit_test, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == DialogInterface.BUTTON_POSITIVE)
+                        finish();
+                    else
+                        mTimer.resume();
+                }
+            });
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -438,6 +455,9 @@ public class TestActivity extends Activity {
      *
      */
     private void submitTest(){
+        if (mTimer.isRunning())
+            mTimer.pause();
+
         String msg = "";
         int unanswered = quizService.unAnswered();
 
@@ -450,8 +470,12 @@ public class TestActivity extends Activity {
         DialogUtils.confirm(this, msg, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mTimer.cancel();
-                showTestResult();
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    mTimer.cancel();
+                    showTestResult();
+                } else {
+                    mTimer.resume();
+                }
             }
         });
 

@@ -15,20 +15,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.j256.ormlite.dao.Dao;
 import com.spark.app.ocb.MyApp;
 import com.spark.app.ocb.R;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
-import com.spark.app.ocb.model.Exam;
 import com.spark.app.ocb.service.QuizService;
-import com.spark.app.ocb.task.QuestionShuffleTask;
-import com.spark.app.ocb.task.TaskListener;
-import com.spark.app.ocb.util.BeanUtils;
-import com.spark.app.ocb.util.SysUtils;
-
-import java.sql.SQLException;
-import java.util.List;
 
 public class PracticeActivity extends Activity {
 	

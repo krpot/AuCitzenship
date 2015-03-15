@@ -81,7 +81,7 @@ public class QuestionAdapter extends BaseAdapter {
         if (item != null) {
 
 
-            String title = (position + 1) + ". " + item.statement;
+            String title = item.id + ". " + item.statement;
             if (item.isCorrect()) {
                 txtTitle.setText(title + " (O)");
             }

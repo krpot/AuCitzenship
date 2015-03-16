@@ -19,6 +19,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.spark.app.ocb.activity.SplashActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,28 +29,37 @@
         </activity>
         <activity
             android:name="com.spark.app.ocb.activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.spark.app.ocb.activity.PracticeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName="com.spark.app.ocb.activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.PracticeActivity" />
         </activity>
-        <activity android:name="com.spark.app.ocb.activity.TestIntroActivity" >
+        <activity
+            android:name="com.spark.app.ocb.activity.TestIntroActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" >
         </activity>
-        <activity android:name="com.spark.app.ocb.activity.TestActivity" />
+        <activity
+            android:name="com.spark.app.ocb.activity.TestActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <!-- <activity android:name=".activity.TestActivity" -->
         <!-- android:parentActivityName=".activity.MainActivity"> -->
         <!-- <meta-data -->
         <!-- android:name="android.support.PARENT_ACTIVITY" -->
         <!-- android:value=".activity.TestActivity" /> -->
         <!-- </activity> -->
-        <activity android:name="com.spark.app.ocb.activity.TestResultActivity" >
+        <activity
+            android:name="com.spark.app.ocb.activity.TestResultActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" >
         </activity>
         <activity
             android:name="com.spark.app.ocb.activity.TextbookActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName="com.spark.app.ocb.activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

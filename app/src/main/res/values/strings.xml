@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">OurCommonBond</string>
+    <string name="app_name">Australian Citizenship</string>
     <string name="menu_settings">Settings</string>
 
     <!-- SplashActivity -->
@@ -11,6 +11,7 @@
     <string name="error_download">Error download data</string>
     <string name="download_completed">Download completed</string>
     <string name="error_apply">Error apply data</string>
+    <string name="not_supported_yet">It is not supported yet.</string>
 
     <!-- Main Activity -->
     <string name="practice">Practice</string>
@@ -19,6 +20,7 @@
     <string name="review">Review</string>
     <string name="info">Information</string>
     <string name="share">Share</string>
+    <string name="textbook">Text Book</string>
 
     <!-- Practice Activity -->
     <string name="before">Before</string>

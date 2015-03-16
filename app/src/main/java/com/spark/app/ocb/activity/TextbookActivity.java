@@ -66,6 +66,7 @@ public class TextbookActivity extends Activity {
     }
 
     private void setupView(){
+        setTitle(R.string.textbook);
         mWebView = (WebView)findViewById(R.id.webview);
 	}
 

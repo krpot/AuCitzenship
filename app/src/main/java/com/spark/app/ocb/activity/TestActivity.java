@@ -202,6 +202,8 @@ public class TestActivity extends Activity {
     }
 
     private void setupView(){
+        setTitle(R.string.test);
+
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 

@@ -37,7 +37,12 @@ var app = angular.module('ocb', [
     })
 })
 .controller('HomeController', function($scope){
-    console.log('======= HomeController created ==========');
+    $scope.parts = [
+        {id:101, key:"part1", title:"Part1 - Australia and its people"},
+        {id:201, key:"part2", title:"Part2 - Australia's democratic beliefs, rights and liberties"},
+        {id:301, key:"part3", title:"Part3 - Government and the law in Australia"},
+    ];
+
     $scope.menu = {
         "part1": [
             {id:101, title:"Our People"},
@@ -66,12 +71,12 @@ var app = angular.module('ocb', [
         ]
     };
 
-    $scope.currentKey;
-    $scope.setMenu = function(key){
-        $scope.currentKey = key;
-        $scope.currentMenu = $scope.menu[key];
+    $scope.currentPart;
+    $scope.setPart = function(part){
+        $scope.currentPart = part;
+        $scope.currentMenu = $scope.menu[part.key];
         $scope.navCollapsed = true;
     }
 
-    $scope.setMenu('part1');
+    $scope.setPart($scope.parts[0]);
 })

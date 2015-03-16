@@ -8,6 +8,15 @@
     tools:context=".MainActivity"
     android:gravity="center">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:src="@drawable/ic_launcher"
+        android:scaleType="center" />
+
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
@@ -28,4 +37,4 @@
         android:linksClickable="true"
         android:gravity="center" />
 
-</LinearLayout><!-- From: file:/Users/spark/Projects/git/OurCommonBond/app/src/main/res/layout/activity_splash.xml -->
+</LinearLayout><!-- From: file:/Users/ianpark/projects/mobile/OurCommonBond/app/src/main/res/layout/activity_splash.xml -->

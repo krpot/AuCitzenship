@@ -194,7 +194,11 @@ public class SysUtils {
 	public static void toast(String text){
 		Toast.makeText(context, text, Toast.LENGTH_LONG).show();
 	}
-	
+
+	public static void toast(int resId){
+		Toast.makeText(context, resId, Toast.LENGTH_LONG).show();
+	}
+
 	public static void alert(String title, String message){
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		

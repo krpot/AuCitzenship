@@ -13,6 +13,37 @@
         android:layout_weight="1" >
 
         <Button
+            android:id="@+id/btnStudy"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="@string/textbook"
+            android:onClick="onButtonClick"
+            android:background="@drawable/btninfo"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnInfo"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="@string/info"
+            android:onClick="onButtonClick"
+            android:background="@drawable/btninfo"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <Button
             android:id="@+id/btnPractice"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
@@ -45,43 +76,12 @@
         android:layout_weight="1" >
 
         <Button
-            android:id="@+id/btnStudy"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="@string/study"
-            android:onClick="onButtonClick"
-            android:background="@drawable/btninfo"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-
-        <Button
             android:id="@+id/btnReview"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:text="@string/review"
-            android:onClick="onButtonClick"
-            android:background="@drawable/btninfo"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
-
-        <Button
-            android:id="@+id/btnInfo"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="@string/info"
             android:onClick="onButtonClick"
             android:background="@drawable/btninfo"
             android:textColor="#FFFFFF"

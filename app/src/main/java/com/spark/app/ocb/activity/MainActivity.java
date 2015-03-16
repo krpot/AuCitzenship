@@ -2,6 +2,7 @@ package com.spark.app.ocb.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -30,15 +31,14 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		setupView();
-		//***loadData();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.activity_main, menu);
+//		return true;
+//	}
 	
 	/**
 	 * Click event handler for buttons
@@ -58,6 +58,14 @@ public class MainActivity extends Activity {
                 Intent intent3 = new Intent(this, TextbookActivity.class);
                 startActivity(intent3);
                 break;
+            case R.id.btnInfo:
+                Intent intent4 = new Intent(Intent.ACTION_VIEW);
+                intent4.setData(Uri.parse("http://www.citizenship.gov.au/applying/how_to_apply"));
+                startActivity(intent4);
+                break;
+            default:
+                SysUtils.toast(R.string.not_supported_yet);
+                break;
         }
 	}
 
@@ -74,96 +82,5 @@ public class MainActivity extends Activity {
     private void setupView(){
 		//btnPractice = (Button)findViewById(R.id.btnPractice);
 	}
-
-    /*
-     *
-     */
-	private void loadData() {
-
-        Dao<Question, Integer> qDao = BeanUtils.getQuestionDao(this);
-        try {
-            boolean questionUpdated = PrefUtils.readBool(AppConstants.KEY_QUESTION_UPDATED);
-            if (questionUpdated) {
-                long count = qDao.countOf();
-                Log.d(TAG, "#####question.size:" + count);
-                questionUpdated = count > 0;
-            }
-
-            if (!questionUpdated){
-                QuestionTask questionTask = new QuestionTask(this, new TaskListener<List<Question>>(){
-                    @Override
-                    public void onError(Throwable th) {
-                        SysUtils.toast("Error while loading questions.");
-                    }
-
-                    @Override
-                    public void onComplete(List<Question> result) {
-                        PrefUtils.writeBool(AppConstants.KEY_QUESTION_UPDATED, true);
-                        Log.d(TAG, "========== QuestionTask onComplete ========");
-                    }
-                });
-                questionTask.execute();
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        /******
-		if (mQDao==null)
-			mQDao = BeanUtils.getQuestionDao(this);
-
-        Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(this);
-		
-		
-		BufferedInputStream in = null;
-		try {
-            answerDao.deleteBuilder().clear();
-            mQDao.deleteBuilder().clear();
-
-            long count = mQDao.countOf();
-            Log.d(TAG, "#####question.size:" + count);
-			//***if (count>20) return;
-
-			AssetManager asm = this.getAssets();
-            String[] list = asm.list("");
-            for (int i=0, sz=list.length; i<sz; i++) {
-                String s = list[i];
-                Log.d(TAG, "#####JSON file name:" + s);
-
-                if (s.endsWith(".json")) {
-                    in = new BufferedInputStream(asm.open(s));
-                    String jsonStr = FileUtils.readTextFile(in);
-                    Log.d(TAG, jsonStr);
-
-                    List<Question> questions = Question.loadFromJson(jsonStr);
-                    for (Question question : questions) {
-                        mQDao.create(question);
-
-                        int answerNo = 0;
-                        for (Answer answer : question.answers) {
-                            answer.id = answerNo++;
-                            Log.d(TAG, "#####Answer:" + answer);
-                            answerDao.create(answer);
-                        }
-                    }
-                }
-            }
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			SysUtils.alert("Load Data Error(DB)", e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			SysUtils.alert("Load Data Error(IO)", e.getMessage());
-		} catch (JSONException e) {
-			e.printStackTrace();
-			SysUtils.alert("Load Data Error(JSON)", e.getMessage());
-		} finally {
-			if (in!=null) try {	in.close();	} catch (Exception e) {}
-		}
-		******/
-	}
-	
 
 }

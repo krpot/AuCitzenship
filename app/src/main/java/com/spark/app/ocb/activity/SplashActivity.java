@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -35,11 +36,10 @@ public class SplashActivity extends Activity {
 
     private ProgressBar spinner;
     private TextView txtIntro;
+    private ImageView imageView;
 
     private Dao<Question, Integer> qDao;
     private Dao<Answer, Integer> aDao;
-
-    //DownloadService mDownloadService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public class SplashActivity extends Activity {
 		setContentView(R.layout.activity_splash);
 		
 		setupView();
+
 
         checkIfThereAreUpdates();
 	}
@@ -64,19 +65,27 @@ public class SplashActivity extends Activity {
     private void setupView(){
         spinner = (ProgressBar)findViewById(R.id.spinner);
         txtIntro = (TextView)findViewById(R.id.txtIntro);
+        imageView = (ImageView)findViewById(R.id.imageView);
 	}
 
     /*
      *
      */
 	private void checkIfThereAreUpdates() {
+        if (PrefUtils.readBool(AppConstants.KEY_QUESTION_UPDATED)){
+            startMainActivity();
+        } else {
+            downloadUpdatedList();
+        }
+	}
 
+    /*
+     *
+     */
+	private void downloadUpdatedList() {
         spinner.setVisibility(View.VISIBLE);
 
         txtIntro.setText(R.string.check_update);
-
-        //mDownloadService = new DownloadService(this, mDownloadReceiver);
-        //mDownloadService.startDownload("http://www.janeart.net/citizen/questions/update.json", "ocbupdate.json", "OcbUpdate");
 
         DownloadTask task = new DownloadTask(new TaskListener<Map<String, String>>() {
             @Override
@@ -100,6 +109,7 @@ public class SplashActivity extends Activity {
                         if (urls.length == 0){
                             Log.d(TAG, "######: No update list!!! ");
                             txtIntro.setText(R.string.no_update);
+                            PrefUtils.writeBool(AppConstants.KEY_QUESTION_UPDATED, true);
                             startMainActivity();
                         } else {
                             updateQuestionsFromServer(urls);
@@ -185,7 +195,9 @@ public class SplashActivity extends Activity {
                             Log.d(TAG, "#### New version:" + PrefUtils.readString(entry.getKey()));
                         }
 
+                        PrefUtils.writeBool(AppConstants.KEY_QUESTION_UPDATED, true);
                     } catch (RuntimeException e) {
+                        e.printStackTrace();
                         txtIntro.setText(R.string.error_apply);
                         //SysUtils.toast("Error while parsing data.\n" + e.getMessage());
                     }
@@ -223,6 +235,10 @@ public class SplashActivity extends Activity {
      *
      */
     private void startMainActivity(){
+        imageView.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.GONE);
+        txtIntro.setVisibility(View.GONE);
+
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run(){

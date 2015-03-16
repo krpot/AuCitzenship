@@ -2,34 +2,21 @@ package com.spark.app.ocb.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 
 import com.j256.ormlite.dao.Dao;
 import com.spark.app.ocb.AppConstants;
 import com.spark.app.ocb.R;
-import com.spark.app.ocb.activity.PracticeActivity;
-import com.spark.app.ocb.activity.SplashActivity;
-import com.spark.app.ocb.activity.TestActivity;
-import com.spark.app.ocb.activity.TestIntroActivity;
-import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.task.QuestionTask;
 import com.spark.app.ocb.task.TaskListener;
 import com.spark.app.ocb.util.BeanUtils;
-import com.spark.app.ocb.util.FileUtils;
 import com.spark.app.ocb.util.PrefUtils;
 import com.spark.app.ocb.util.SysUtils;
 
-import org.json.JSONException;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -66,6 +53,10 @@ public class MainActivity extends Activity {
             case R.id.btnTest:
                 Intent intent2 = new Intent(this, TestIntroActivity.class);
                 startActivityForResult(intent2, AppConstants.REQUEST_MODAL);
+                break;
+            case R.id.btnStudy:
+                Intent intent3 = new Intent(this, TextbookActivity.class);
+                startActivity(intent3);
                 break;
         }
 	}

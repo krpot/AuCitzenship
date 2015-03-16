@@ -1,9 +1,6 @@
 package com.spark.app.ocb.activity;
 
 import android.app.Activity;
-import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,13 +16,10 @@ import com.spark.app.ocb.R;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.model.Updates;
-import com.spark.app.ocb.service.DownloadInfo;
-import com.spark.app.ocb.service.DownloadService;
 import com.spark.app.ocb.task.DownloadTask;
 import com.spark.app.ocb.task.TaskListener;
 import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.PrefUtils;
-import com.spark.app.ocb.util.SysUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -238,43 +232,5 @@ public class SplashActivity extends Activity {
             }
         }, SPLASH_TIMEOUT);
     }
-
-//    private void downloadCompleted(DownloadInfo downloadInfo){
-//
-//        if (downloadInfo != null) {
-//            if (downloadInfo.status != DownloadManager.STATUS_SUCCESSFUL) {
-//                SysUtils.toast(downloadInfo.getStatusMessage() + " " + downloadInfo.getErrorMessage());
-//            } else {
-//
-//                //downloadInfo.localFileName
-//                //mDownloadService.startDownload();
-//            }
-//        }
-//
-//        spinner.setVisibility(View.GONE);
-//    }
-
-//    private BroadcastReceiver mDownloadReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            String action = intent.getAction();
-//            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)){
-//
-//                DownloadInfo info = null;
-//                long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0L);
-//                if ( id != mDownloadService.getDownloadId()){
-//                    Log.d(TAG, "Different download ID. Skip.");
-//                } else {
-//                    info = mDownloadService.queryDownloadInfo();
-//                }
-//
-//                downloadCompleted(info);
-//
-//            } else if (DownloadManager.ACTION_NOTIFICATION_CLICKED.equals(action)){
-//                DownloadInfo info = mDownloadService.queryDownloadInfo();
-//                Log.d(TAG, "##### Downloaded:" + info);
-//            }
-//        }
-//    };
 
 }

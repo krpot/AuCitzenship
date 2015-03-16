@@ -2,44 +2,49 @@ package com.spark.app.ocb.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.text.Html;
+import android.support.v4.app.ListFragment;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.j256.ormlite.dao.Dao;
 import com.spark.app.ocb.MyApp;
 import com.spark.app.ocb.R;
 import com.spark.app.ocb.adpter.QuestionAdapter;
+import com.spark.app.ocb.adpter.TestResultAdapter;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.model.ExamResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.spark.app.ocb.AppConstants.KEY_RESULT_CORRECT;
+import static com.spark.app.ocb.AppConstants.KEY_RESULT_MARKS;
+import static com.spark.app.ocb.AppConstants.KEY_RESULT_MISSING;
+import static com.spark.app.ocb.AppConstants.KEY_RESULT_TIME;
+import static com.spark.app.ocb.AppConstants.KEY_RESULT_TOTAL;
+import static com.spark.app.ocb.AppConstants.KEY_RESULT_WRONG;
 import static com.spark.app.ocb.MyApp.app;
+import static java.util.AbstractMap.SimpleEntry;
 
-public class TestResultActivity extends FragmentActivity implements ActionBar.TabListener {
+
+public class TestResultActivity extends FragmentActivity {
 
     private static final String TAG = "TestResultActivity";
 
+    private static final String FR_SUMMARY = "FR_SUMMARY";
+    private static final String FR_REVIEW  = "FR_REVIEW";
+
     private Dao<Question, Integer> mQDao;
-    private ListFragment mSummaryFragment;
-    private ListFragment mReviewFragment;
+    private SummaryFragment mSummaryFragment;
+    private ReviewFragment mReviewFragment;
 
     //----------------------------------------------------
     //
@@ -64,7 +69,15 @@ public class TestResultActivity extends FragmentActivity implements ActionBar.Ta
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                this.finish();
+                if (mReviewFragment == null || mSummaryFragment.isVisible()){
+                    setResult(Activity.RESULT_CANCELED);
+                    this.finish();
+                } else {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container, mSummaryFragment, FR_SUMMARY)
+                            .commit();
+                }
                 break;
         }
 
@@ -92,134 +105,152 @@ public class TestResultActivity extends FragmentActivity implements ActionBar.Ta
 
     private void setupView() {
         ActionBar actionBar = getActionBar();
-
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        String[] tabs = getResources().getStringArray(R.array.tabs);
-        for (String s : tabs) {
-            actionBar.addTab(actionBar.newTab().setText(s).setTabListener(this));
-        }
+        mSummaryFragment = new SummaryFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, mSummaryFragment, FR_SUMMARY)
+                .commit();
 
     }
 
-    //---------------------------------------------------------------------
-    // ActionBar.TabListener
-    //---------------------------------------------------------------------
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-        Log.d(TAG, "#### tab.getPosition():" + tab.getPosition());
+    private void showReviewFragment(int position){
+        if (position>3) return;
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        switch (tab.getPosition()){
+        //if (mReviewFragment == null)
+        mReviewFragment = ReviewFragment.newInstance(position);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, mReviewFragment, FR_REVIEW)
+                .commit();
+        //else
+            //mReviewFragment.setupListView(position);
+
+        /*
+        switch (position){
+            //KEY_RESULT_TOTAL
             case 0:
-                //if (mSummaryFragment == null)
-                    mSummaryFragment = new SummaryFragment();
-
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, mSummaryFragment)
-                        .commit();
-                break;
+            //KEY_RESULT_CORRECT
             case 1:
-                //if (mReviewFragment == null)
-                    mReviewFragment = new ReviewFragment();
+            //KEY_RESULT_WRONG
+            case 2:
+            //KEY_RESULT_MISSING
+            case 3:
 
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, mReviewFragment)
-                        .commit();
                 break;
+            //KEY_RESULT_MARKS
+            case 4:
+            //KEY_RESULT_TIME
+            case 5:
+                return;
         }
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+        */
     }
 
     //---------------------------------------------------------------------
-    // for summary tab
+    // for summary
     //---------------------------------------------------------------------
     public static class SummaryFragment extends ListFragment {
 
+        TestResultAdapter adapter;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-
-            View rootView = inflater.inflate(R.layout.fragment_result_summary, container, false);
-
-//            TextView txtSummary = (TextView)rootView.findViewById(R.id.txtSummary);
-//
-//            ExamResult result = ExamResult.newInstance(app.exam());
-//
-//            StringBuffer sb = new StringBuffer();
-//            sb.append("<h4>Questions: ").append(result.total).append("</h4>")
-//              .append("<h4>Score: ").append(result.correct).append("</h4>")
-//              .append("<h4>Wrong: ").append(result.wrong).append("</h4>")
-//              .append("<h4>Marks: ").append(result.markRatio()).append("%</h4>")
-//              .append("<h4>Unanswered: ").append(result.unanswered).append("</h4>")
-//              .append("<h4>Time spent: ").append(DateUtils.formatElapsedTime(result.elapsed)).append("</h4>");
-//            txtSummary.setText(Html.fromHtml(sb.toString()));
-
-            return rootView;
+            return inflater.inflate(R.layout.fragment_result_summary, container, false);
         }
-
-
-
-        public void setupListView(){
-            ExamResult result = ExamResult.newInstance(app.exam());
-            String[] values = {
-                    "Questions:" + result.total,
-                    "Score:" + result.correct,
-                    "Wrong:" + result.wrong,
-                    "Marks:" + result.markRatio(),
-                    "Unanswered:" + result.unanswered,
-                    "Time spent:" + DateUtils.formatElapsedTime(result.elapsed)
-            };
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                    android.R.layout.simple_list_item_1,
-                    android.R.id.text1,
-                    values
-            );
-
-            getListView().setAdapter(adapter);
-        }
-
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
             setupListView();
         }
+
+        @Override
+        public void onListItemClick(ListView l, View v, int position, long id) {
+            //SimpleEntry<String, String> item = adapter.getItem(position);
+
+            TestResultActivity activity = (TestResultActivity)getActivity();
+            activity.showReviewFragment(position);
+        }
+
+        private void setupListView(){
+            ExamResult result = ExamResult.newInstance(app.exam());
+
+            List<SimpleEntry<String, String>> items = new ArrayList<SimpleEntry<String, String>>();
+            items.add(new SimpleEntry(KEY_RESULT_TOTAL, String.valueOf(result.total)));
+            items.add(new SimpleEntry(KEY_RESULT_CORRECT, String.valueOf(result.correct)));
+            items.add(new SimpleEntry(KEY_RESULT_WRONG, String.valueOf(result.wrong)));
+            items.add(new SimpleEntry(KEY_RESULT_MISSING, String.valueOf(result.unanswered)));
+            items.add(new SimpleEntry(KEY_RESULT_MARKS, String.valueOf(result.markRatio())));
+            items.add(new SimpleEntry(KEY_RESULT_TIME, DateUtils.formatElapsedTime(result.elapsed)));
+
+            adapter = new TestResultAdapter(getActivity(), items);
+            getListView().setAdapter(adapter);
+        }
+
     }
 
     //---------------------------------------------------------------------
-    // for review tab
+    // for review
     //---------------------------------------------------------------------
     public static class ReviewFragment extends ListFragment {
+
+        static int mOption;
+        public static ReviewFragment newInstance(int option){
+            mOption = option;
+            return new ReviewFragment();
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.fragment_result_review, container, false);
-
-            return rootView;
+            return inflater.inflate(R.layout.fragment_result_review, container, false);
         }
 
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-
-            setupListView();
+            setupListView(mOption);
         }
 
-        public void setupListView(){
+        public void setupListView(int option){
+
+            List<Question> subList = null;
             List<Question> questionList = MyApp.app.exam().questions;
-            QuestionAdapter adapter = new QuestionAdapter(getActivity(), questionList);
+            for (int i=0, sz=questionList.size(); i<sz; i++){
+                questionList.get(i).id = i+1;
+            }
+
+            if (option ==0) {
+                subList = questionList;
+            } else {
+                subList = new ArrayList<Question>();
+                //!KEY_RESULT_TOTAL
+                for (Question q : questionList) {
+                    switch (option) {
+                        //KEY_RESULT_CORRECT
+                        case 1:
+                            if (q.isCorrect()) subList.add(q);
+                            break;
+
+                        //KEY_RESULT_WRONG
+                        case 2:
+                            if (!q.isCorrect()) subList.add(q);
+                            break;
+
+                        //KEY_RESULT_MISSING
+                        case 3:
+                            if (q.selected<0) subList.add(q);
+                            break;
+                    }
+                }
+            }
+
+            QuestionAdapter adapter = new QuestionAdapter(getActivity(), subList);
             getListView().setAdapter(adapter);
         }
+
     }
 }

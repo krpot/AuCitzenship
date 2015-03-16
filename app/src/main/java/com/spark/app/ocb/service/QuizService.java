@@ -87,6 +87,8 @@ public class QuizService {
     private void goTo(int pos) {
         Question question = mExam.getQuestion(pos);
         Log.d(TAG, "##### Next Question:" + question);
+
+
 //        if (question == null) {
 //            return;
 //        }

@@ -39,13 +39,20 @@
         </activity>
         <activity android:name=".activity.TestIntroActivity">
         </activity>
-        <activity android:name=".activity.TestActivity"
+        <activity android:name=".activity.TestActivity" />
+        <!--<activity android:name=".activity.TestActivity"-->
+            <!--android:parentActivityName=".activity.MainActivity">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value=".activity.TestActivity" />-->
+        <!--</activity>-->
+        <activity android:name=".activity.TestResultActivity">
+        </activity>
+        <activity android:name=".activity.TextbookActivity"
             android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.TestActivity" />
-        </activity>
-        <activity android:name=".activity.TestResultActivity">
+                android:value=".activity.TextbookActivity" />
         </activity>
 
     </application>

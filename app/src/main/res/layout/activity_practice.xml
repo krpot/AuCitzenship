@@ -26,14 +26,26 @@
         android:layout_marginTop="10dp">
 
         <Button
+            android:id="@+id/btnFinish"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onButtonClick"
+            android:text="@string/finish"
+            android:background="@drawable/btnsuccess"
+            android:layout_margin="2dp"
+            android:textColor="#FFFFFF" />
+
+        <Button
             android:id="@+id/btnNext"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onButtonClick"
             android:text="@string/next"
-            android:background="@drawable/btndefault"
-            android:layout_margin="2dp" />
+            android:background="@drawable/btnprimary"
+            android:layout_margin="2dp"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/btnAnothergo"
@@ -45,16 +57,6 @@
             android:background="@drawable/btndefault"
             android:layout_margin="2dp"
             android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btnFinish"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onButtonClick"
-            android:text="@string/finish"
-            android:background="@drawable/btndefault"
-            android:layout_margin="2dp" />
 
     </LinearLayout>
 

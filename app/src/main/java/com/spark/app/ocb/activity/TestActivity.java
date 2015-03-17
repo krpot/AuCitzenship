@@ -31,6 +31,8 @@ import com.spark.app.ocb.util.CountDownTimerWithPause;
 import com.spark.app.ocb.util.DialogUtils;
 import com.spark.app.ocb.util.SysUtils;
 
+import java.util.List;
+
 import static com.spark.app.ocb.MyApp.app;
 
 public class TestActivity extends Activity {
@@ -61,6 +63,10 @@ public class TestActivity extends Activity {
                 case QuizService.MSG_LOAD_FINISHED:
                     Log.d(TAG, "##### MSG_LOAD_FINISHED:" + msg.obj);
 
+                    if (msg.obj != null) {
+                        List<Question> questionList = (List<Question>)(msg.obj);
+                        seekBar.setMax(questionList.size());
+                    }
                     txtComment.setTextColor(Color.BLACK);
                     quizService.goToFirst();
                     mTimer.create();
@@ -143,23 +149,33 @@ public class TestActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+        getMenuInflater().inflate(R.menu.menu_test, menu);
+
+        //boolean paused = mTimer.isPaused();
+        //Log.d(TAG, "##### onCreateOptionsMenu / " + paused);
+        //menu.findItem(R.id.menu_resume).setVisible(paused);
+        //menu.findItem(R.id.menu_pause).setVisible(!paused);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home){
-            mTimer.pause();
-            DialogUtils.confirm(this, R.string.confirm_exit_test, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (which == DialogInterface.BUTTON_POSITIVE)
-                        finish();
-                    else
-                        mTimer.resume();
-                }
-            });
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                confirmExit();
+                break;
+            case R.id.menu_list:
+                displayAsList();
+                break;
+//            case R.id.menu_pause:
+//                Log.d(TAG, "##### onOptionsItemSelected / menu_pause");
+//                mTimer.pause();
+//                break;
+//            case R.id.menu_resume:
+//                Log.d(TAG, "##### onOptionsItemSelected / menu_resume");
+//                mTimer.resume();
+//                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -229,6 +245,25 @@ public class TestActivity extends Activity {
         seekBar     = (SeekBar)findViewById(R.id.seekBar);
         seekBar.setOnSeekBarChangeListener(onSeekBarChangeListener);
 
+    }
+
+    private void displayAsList(){
+        //mTimer.pause();
+
+        //mTimer.resume();
+    }
+
+    private void confirmExit(){
+        mTimer.pause();
+        DialogUtils.confirm(this, R.string.confirm_exit_test, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE)
+                    finish();
+                else
+                    mTimer.resume();
+            }
+        });
     }
 
     //----------------------------------------------------
@@ -316,7 +351,6 @@ public class TestActivity extends Activity {
 
         setTitle("Question " + (quizService.getPosition() + 1) + " of " + quizService.total());
         txtTitle.setText(question.statement);
-        txtComment.setText("");
         btnNext.setEnabled(false);
         radioAnswer.clearCheck();
 
@@ -340,119 +374,6 @@ public class TestActivity extends Activity {
             answerButtons[question.selected].setChecked(true);
         }
     }
-
-    /*
-     *
-     */
-//    private void generateQuestions() {
-//        setPosition(-1);
-//        app.exam().clear();
-//
-//        if (mQDao==null)
-//            mQDao = BeanUtils.getQuestionDao(this);
-//
-//        QuestionShuffleTask task = new QuestionShuffleTask(this, mQDao, new TaskListener<List<Question>>() {
-//            @Override
-//            public void onError(Throwable th) {
-//                Log.d(TAG, "========= QuestionShuffleTask onError =========");
-//                SysUtils.toast("Error while generating questions.");
-//            }
-//
-//            @Override
-//            public void onComplete(List<Question> result) {
-//                Log.d(TAG, "========= QuestionShuffleTask onComplete =========" + result);
-//                if (result != null && !result.isEmpty()) {
-//                    app.exam().questions = result;
-//
-//                    seekBar.setMax(result.size());
-//                    seekBar.setProgress(0);
-//
-//                    onButtonClick(btnNext);
-//                    mTimer.start();
-//                }
-//            }
-//        });
-//
-//        task.execute(20);
-//    }
-//
-//    /*
-//     *
-//     */
-//    private void nextQuestion() {
-//        Question question = app.exam().getQuestion(mPosition);
-//        Log.d(TAG, "##### Next Question:" + question);
-//
-//        if (question == null) return;
-//
-//        if (question.answers==null || question.answers.isEmpty()) {
-//            Log.d(TAG, "---------- nextQuestion / Load answers ---------");
-//            try {
-//                Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(this);
-//                question.answers = answerDao.queryBuilder()
-//                        .where()
-//                        .eq("question_id", question.id)
-//                        .query();
-//
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//                SysUtils.toast("Display question error.");
-//                return;
-//            }
-//
-//            question.shuffle();
-//        }
-//
-//        setTitle("Question " + (mPosition + 1) + " of " + app.exam().questions.size());
-//        txtTitle.setText(question.statement);
-//        txtTitle.setTag(question);
-//        radioAnswer.clearCheck();
-//
-//        Log.d(TAG, "##### Question.Answer.size:" + question.answers.size());
-//
-//        int i=0;
-//        for (Answer answer : question.answers){
-//            Log.d(TAG, "##### question.answer:" + answer);
-//            RadioButton radioButton = (RadioButton)radioAnswer.getChildAt(i);
-//            radioButton.setText(answer.answer);
-//            radioButton.setTag(R.string.key_index, i);
-//            radioButton.setTag(R.string.key_answer, answer);
-//
-//            if (question.selected>=0 && i == question.selected){
-//                radioButton.setChecked(true);
-//            }
-//
-//            i++;
-//        }
-//
-//    }
-//
-//    private boolean isLastQuestion(){
-//        return (!app.exam().questions.isEmpty()) && (mPosition >= ( app.exam().questions.size()-1));
-//    }
-//
-//    private Question currentQuestion(){
-//        if (app.exam() == null) return null;
-//
-//        if (mPosition>=0 && mPosition<=app.exam().questions.size()-1)
-//            return app.exam().questions.get(mPosition);
-//
-//        return null;
-//    }
-
-    /*
-     *
-     */
-//    private void setPosition(int position){
-//        if (mPosition != position)
-//            mPosition = position;
-//
-//        seekBar.setProgress(position);
-//
-//        btnBefore.setEnabled(mPosition>0);
-//        btnNext.setEnabled(!isLastQuestion());
-//    }
-
     /*
      *
      */
@@ -464,10 +385,11 @@ public class TestActivity extends Activity {
         int unanswered = quizService.unAnswered();
 
         if (unanswered>0){
-            msg += getString(unanswered > 1 ? R.string.alert_not_answered_plural : R.string.alert_not_answered);
+            String sQuestion = unanswered == 1 ? "One question " : unanswered + " questions";
+            msg = String.format(getString(R.string.alert_not_answered), sQuestion) + "\n";
         }
 
-        msg += "\n" + getString(R.string.confirm_submit_test);
+        msg += getString(R.string.confirm_submit_test);
 
         DialogUtils.confirm(this, msg, new DialogInterface.OnClickListener() {
             @Override

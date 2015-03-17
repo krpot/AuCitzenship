@@ -2,7 +2,10 @@
 <resources>
 
     <string name="app_name">Australian Citizenship</string>
-    <string name="menu_settings">Settings</string>
+    <string name="settings">Settings</string>
+    <string name="list">List</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
 
     <!-- SplashActivity -->
     <string name="check_update">Checking update</string>
@@ -52,13 +55,7 @@
 
     <string name="confirm_exit_test">Are you sure to exit the test?</string>
     <string name="confirm_submit_test">Are you sure to submit the test?</string>
-    <string name="alert_not_answered">There is a question you have not answered.</string>
-    <string name="alert_not_answered_plural">There are questions you have not answered.</string>
+    <string name="alert_not_answered">%s not answered yet.</string>
     <string name="alert_test_finished">Test finished.</string>
-
-    <array name="tabs">
-        <item>Summary</item>
-        <item>Review</item>
-    </array>
 
 </resources>

@@ -8,9 +8,6 @@
 package com.spark.app.ocb;
 
 public final class R {
-    public static final class array {
-        public static final int tabs=0x7f040000;
-    }
     public static final class attr {
     }
     public static final class drawable {
@@ -28,34 +25,39 @@ public final class R {
         public static final int well=0x7f02000b;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f080000;
-        public static final int btnAnothergo=0x7f08000a;
-        public static final int btnBefore=0x7f080010;
-        public static final int btnCancel=0x7f080013;
-        public static final int btnFinish=0x7f08000b;
-        public static final int btnInfo=0x7f080002;
-        public static final int btnNext=0x7f080009;
-        public static final int btnPractice=0x7f080003;
-        public static final int btnReview=0x7f080005;
-        public static final int btnShare=0x7f080006;
-        public static final int btnStart=0x7f080012;
-        public static final int btnStudy=0x7f080001;
-        public static final int btnSubmit=0x7f080011;
-        public static final int btnTest=0x7f080004;
-        public static final int container=0x7f080014;
-        public static final int imageView=0x7f08000c;
-        public static final int menu_settings=0x7f08001b;
-        public static final int radioAnswer=0x7f080017;
-        public static final int radioa=0x7f080018;
-        public static final int radiob=0x7f080019;
-        public static final int radioc=0x7f08001a;
-        public static final int seekBar=0x7f08000f;
-        public static final int spinner=0x7f08000d;
-        public static final int textView2=0x7f080007;
-        public static final int txtComment=0x7f080008;
-        public static final int txtIntro=0x7f08000e;
-        public static final int txtSummary=0x7f080016;
-        public static final int webview=0x7f080015;
+        public static final int LinearLayout1=0x7f070000;
+        public static final int btnAnothergo=0x7f07000b;
+        public static final int btnBefore=0x7f070011;
+        public static final int btnCancel=0x7f070014;
+        public static final int btnFinish=0x7f070009;
+        public static final int btnInfo=0x7f070002;
+        public static final int btnNext=0x7f07000a;
+        public static final int btnPractice=0x7f070003;
+        public static final int btnReview=0x7f070005;
+        public static final int btnShare=0x7f070006;
+        public static final int btnStart=0x7f070013;
+        public static final int btnStudy=0x7f070001;
+        public static final int btnSubmit=0x7f070012;
+        public static final int btnTest=0x7f070004;
+        public static final int container=0x7f070015;
+        public static final int imageView=0x7f07000c;
+        public static final int listView=0x7f07001c;
+        public static final int menu_list=0x7f07001e;
+        public static final int menu_pause=0x7f07001f;
+        public static final int menu_resume=0x7f070020;
+        public static final int menu_settings=0x7f07001d;
+        public static final int radioAnswer=0x7f070018;
+        public static final int radioa=0x7f070019;
+        public static final int radiob=0x7f07001a;
+        public static final int radioc=0x7f07001b;
+        public static final int seekBar=0x7f070010;
+        public static final int spinner=0x7f07000d;
+        public static final int textView=0x7f07000f;
+        public static final int textView2=0x7f070007;
+        public static final int txtComment=0x7f070008;
+        public static final int txtIntro=0x7f07000e;
+        public static final int txtSummary=0x7f070017;
+        public static final int webview=0x7f070016;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -68,44 +70,49 @@ public final class R {
         public static final int fragment_result_review=0x7f030007;
         public static final int fragment_result_summary=0x7f030008;
         public static final int question_item=0x7f030009;
-        public static final int test_result_item=0x7f03000a;
+        public static final int quiz_card_view=0x7f03000a;
+        public static final int quiz_list_view=0x7f03000b;
+        public static final int test_result_item=0x7f03000c;
     }
     public static final class menu {
-        public static final int activity_main=0x7f070000;
+        public static final int menu_main=0x7f060000;
+        public static final int menu_test=0x7f060001;
     }
     public static final class string {
-        public static final int alert_not_answered=0x7f050000;
-        public static final int alert_not_answered_plural=0x7f050001;
-        public static final int alert_test_finished=0x7f050002;
-        public static final int another_go=0x7f050003;
-        public static final int app_name=0x7f050004;
-        public static final int before=0x7f050005;
-        public static final int cancel=0x7f050006;
-        public static final int check_update=0x7f050007;
-        public static final int confirm_exit_test=0x7f050008;
-        public static final int confirm_submit_test=0x7f050009;
-        public static final int download_completed=0x7f05000a;
-        public static final int download_update=0x7f05000b;
-        public static final int error_apply=0x7f05000c;
-        public static final int error_download=0x7f05000d;
-        public static final int finish=0x7f05000e;
-        public static final int info=0x7f05000f;
-        public static final int key_answer=0x7f050010;
-        public static final int key_index=0x7f050011;
-        public static final int menu_settings=0x7f050012;
-        public static final int next=0x7f050013;
-        public static final int no_update=0x7f050014;
-        public static final int not_supported_yet=0x7f050015;
-        public static final int practice=0x7f050016;
-        public static final int review=0x7f050017;
-        public static final int share=0x7f050018;
-        public static final int start=0x7f050019;
-        public static final int study=0x7f05001a;
-        public static final int submit=0x7f05001b;
-        public static final int test=0x7f05001c;
-        public static final int test_intro=0x7f05001d;
-        public static final int test_result=0x7f05001e;
-        public static final int textbook=0x7f05001f;
+        public static final int alert_not_answered=0x7f040000;
+        public static final int alert_test_finished=0x7f040001;
+        public static final int another_go=0x7f040002;
+        public static final int app_name=0x7f040003;
+        public static final int before=0x7f040004;
+        public static final int cancel=0x7f040005;
+        public static final int check_update=0x7f040006;
+        public static final int confirm_exit_test=0x7f040007;
+        public static final int confirm_submit_test=0x7f040008;
+        public static final int download_completed=0x7f040009;
+        public static final int download_update=0x7f04000a;
+        public static final int error_apply=0x7f04000b;
+        public static final int error_download=0x7f04000c;
+        public static final int finish=0x7f04000d;
+        public static final int info=0x7f04000e;
+        public static final int key_answer=0x7f04000f;
+        public static final int key_index=0x7f040010;
+        public static final int list=0x7f040011;
+        public static final int next=0x7f040012;
+        public static final int no_update=0x7f040013;
+        public static final int not_supported_yet=0x7f040014;
+        public static final int pause=0x7f040015;
+        public static final int practice=0x7f040016;
+        public static final int resume=0x7f040017;
+        public static final int review=0x7f040018;
+        public static final int settings=0x7f040019;
+        public static final int share=0x7f04001a;
+        public static final int start=0x7f04001b;
+        public static final int study=0x7f04001c;
+        public static final int submit=0x7f04001d;
+        public static final int test=0x7f04001e;
+        public static final int test_intro=0x7f04001f;
+        public static final int test_result=0x7f040020;
+        public static final int textbook=0x7f040021;
     }
     public static final class style {
         /** 
@@ -116,9 +123,9 @@ public final class R {
  API 11 theme customizations can go here. 
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f050000;
         /**  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f060001;
+        public static final int AppTheme=0x7f050001;
     }
 }

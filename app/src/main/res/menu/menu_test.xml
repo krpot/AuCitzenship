@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_list"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/list"/>
+    <item
+        android:id="@+id/menu_pause"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/pause"
+        android:visible="false" />
+    <item
+        android:id="@+id/menu_resume"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/resume"
+        android:visible="false" />
+
+</menu>

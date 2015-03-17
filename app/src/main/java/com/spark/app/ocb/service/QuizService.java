@@ -88,32 +88,9 @@ public class QuizService {
         Question question = mExam.getQuestion(pos);
         Log.d(TAG, "##### Next Question:" + question);
 
-
-//        if (question == null) {
-//            return;
-//        }
-//
-//        if (question.answers==null || question.answers.isEmpty()) {
-//            Log.d(TAG, "---------- goTo / Load answers ---------");
-//            try {
-//                Dao<Answer, Integer> answerDao = BeanUtils.getAnswerDao(mContext);
-//                question.answers = answerDao.queryBuilder()
-//                        .where()
-//                        .eq("question_id", question.id)
-//                        .query();
-//
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//                SysUtils.toast("Load data error.");
-//                return;
-//            }
-//
-//            question.shuffle();
-//        }
-
         sendMessage(MSG_CHANGED, pos, 0, question);
 
-        Log.d(TAG, "##### Question.Answer.size:" + question.answers.size());
+        //Log.d(TAG, "##### Question.Answer.size:" + question.answers.size());
     }
 
     public int getPosition(){
@@ -156,7 +133,7 @@ public class QuizService {
         int unanswered = 0;
 
         for (Question question : mExam.questions){
-            if (question == null && question.selected<0)
+            if (question != null && question.selected<0)
                 unanswered++;
         }
 

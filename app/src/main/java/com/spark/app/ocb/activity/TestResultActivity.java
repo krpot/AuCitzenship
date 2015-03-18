@@ -2,8 +2,10 @@ package com.spark.app.ocb.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.text.format.DateUtils;
@@ -73,10 +75,10 @@ public class TestResultActivity extends FragmentActivity {
                     setResult(Activity.RESULT_CANCELED);
                     this.finish();
                 } else {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.container, mSummaryFragment, FR_SUMMARY)
-                            .commit();
+//                    getSupportFragmentManager()
+//                            .beginTransaction()
+//                            .replace(R.id.container, mSummaryFragment, FR_SUMMARY)
+//                            .commit();
                 }
                 break;
         }
@@ -106,13 +108,16 @@ public class TestResultActivity extends FragmentActivity {
     private void setupView() {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        mSummaryFragment = new SummaryFragment();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, mSummaryFragment, FR_SUMMARY)
-                .commit();
+        actionBar.addTab(actionBar.newTab().setText("Questions").setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText("Summary").setTabListener(tabListener));
+
+//        mSummaryFragment = new SummaryFragment();
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.container, mSummaryFragment, FR_SUMMARY)
+//                .commit();
 
     }
 
@@ -120,10 +125,10 @@ public class TestResultActivity extends FragmentActivity {
         if (position>3) return;
 
         //if (mReviewFragment == null)
-        mReviewFragment = ReviewFragment.newInstance(position);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, mReviewFragment, FR_REVIEW)
-                .commit();
+//        mReviewFragment = ReviewFragment.newInstance(position);
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.container, mReviewFragment, FR_REVIEW)
+//                .commit();
         //else
             //mReviewFragment.setupListView(position);
 
@@ -148,6 +153,48 @@ public class TestResultActivity extends FragmentActivity {
         */
     }
 
+    /*
+     * Tab listener
+     */
+    private ActionBar.TabListener tabListener = new ActionBar.TabListener(){
+        @Override
+        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+            Fragment fragment;
+            switch (tab.getPosition()){
+                case 0:
+                    if (mReviewFragment == null)
+                        mReviewFragment = ReviewFragment.newInstance();
+
+                    fragment = mReviewFragment;
+//                    getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.container, mReviewFragment, FR_REVIEW)
+//                            .commit();
+                    break;
+                case 1:
+                    if (mSummaryFragment==null)
+                        mSummaryFragment = new SummaryFragment();
+                    fragment = mSummaryFragment;
+                    break;
+                default:
+                    return;
+            }
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+
+        }
+
+        @Override
+        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        }
+
+        @Override
+        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        }
+    };
+
     //---------------------------------------------------------------------
     // for summary
     //---------------------------------------------------------------------
@@ -170,8 +217,8 @@ public class TestResultActivity extends FragmentActivity {
         public void onListItemClick(ListView l, View v, int position, long id) {
             //SimpleEntry<String, String> item = adapter.getItem(position);
 
-            TestResultActivity activity = (TestResultActivity)getActivity();
-            activity.showReviewFragment(position);
+            //TestResultActivity activity = (TestResultActivity)getActivity();
+            //activity.showReviewFragment(position);
         }
 
         private void setupListView(){
@@ -182,8 +229,8 @@ public class TestResultActivity extends FragmentActivity {
             items.add(new SimpleEntry(KEY_RESULT_CORRECT, String.valueOf(result.correct)));
             items.add(new SimpleEntry(KEY_RESULT_WRONG, String.valueOf(result.wrong)));
             items.add(new SimpleEntry(KEY_RESULT_MISSING, String.valueOf(result.unanswered)));
-            items.add(new SimpleEntry(KEY_RESULT_MARKS, String.valueOf(result.markRatio())));
             items.add(new SimpleEntry(KEY_RESULT_TIME, DateUtils.formatElapsedTime(result.elapsed)));
+            items.add(new SimpleEntry(KEY_RESULT_MARKS, result.markRatio() + "%"));
 
             adapter = new TestResultAdapter(getActivity(), items);
             getListView().setAdapter(adapter);
@@ -197,8 +244,8 @@ public class TestResultActivity extends FragmentActivity {
     public static class ReviewFragment extends ListFragment {
 
         static int mOption;
-        public static ReviewFragment newInstance(int option){
-            mOption = option;
+        public static ReviewFragment newInstance(){
+            //mOption = option;
             return new ReviewFragment();
         }
 
@@ -212,7 +259,8 @@ public class TestResultActivity extends FragmentActivity {
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            setupListView(mOption);
+            setupListView(0);
+            //setupListView(mOption);
         }
 
         public void setupListView(int option){

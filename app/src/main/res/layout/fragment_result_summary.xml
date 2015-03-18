@@ -18,6 +18,7 @@
         android:layout_height="match_parent"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:background="@drawable/well"
-        android:text="Summary" />
+        android:text="Summary"
+        android:visibility="gone" />
 
 </LinearLayout>

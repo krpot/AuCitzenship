@@ -18,6 +18,7 @@
         android:layout_height="match_parent"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:background="@drawable/well"
-        android:text="Review" />
+        android:text="Review"
+        android:visibility="gone" />
 
-</LinearLayout><!-- From: file:/Users/spark/Projects/git/OurCommonBond/app/src/main/res/layout/fragment_result_review.xml -->
+</LinearLayout><!-- From: file:/Users/ianpark/projects/mobile/OurCommonBond/app/src/main/res/layout/fragment_result_review.xml -->

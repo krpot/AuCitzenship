@@ -69,6 +69,10 @@ public class QuestionShuffleTask extends AsyncTask<Integer, List<Question>, List
                         }
                     }).getResults();
 
+            int no = 1;
+            for (Question q : questionList)
+                q.id = no++;
+
             return questionList;
 
         } catch (SQLException e) {

@@ -2,13 +2,17 @@ package com.spark.app.ocb.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.MenuItemCompat;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -24,6 +28,7 @@ import android.widget.TextView;
 import com.spark.app.ocb.AppConstants;
 import com.spark.app.ocb.MyApp;
 import com.spark.app.ocb.R;
+import com.spark.app.ocb.adpter.QuestionFilterAdapter;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
 import com.spark.app.ocb.service.QuizService;
@@ -31,6 +36,7 @@ import com.spark.app.ocb.util.CountDownTimerWithPause;
 import com.spark.app.ocb.util.DialogUtils;
 import com.spark.app.ocb.util.SysUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.spark.app.ocb.MyApp.app;
@@ -39,7 +45,7 @@ public class TestActivity extends Activity {
 
     private static final String TAG = "TestActivity";
 
-    private TextView txtTitle, txtComment;
+    private TextView txtTitle, txtElapsed;
     private RadioGroup radioAnswer;
     private RadioButton[] answerButtons;
     private Button btnNext, btnBefore, btnSubmit;
@@ -65,17 +71,16 @@ public class TestActivity extends Activity {
 
                     if (msg.obj != null) {
                         List<Question> questionList = (List<Question>)(msg.obj);
-                        seekBar.setMax(questionList.size());
+                        seekBar.setMax(questionList.size()-1);
                     }
-                    txtComment.setTextColor(Color.BLACK);
+                    txtElapsed.setTextColor(Color.BLACK);
                     quizService.goToFirst();
+                    invalidateOptionsMenu();
                     mTimer.create();
-
                     break;
 
                 case QuizService.MSG_SELECTED:
                     Log.d(TAG, "##### MSG_SELECTED:" + msg.arg1 + ", Question:" + msg.obj);
-                    checkAnswer((Question)msg.obj);
                     break;
 
                 case QuizService.MSG_ERROR:
@@ -96,10 +101,10 @@ public class TestActivity extends Activity {
             app.exam().elapsed = AppConstants.TEST_MINUTE - millisUntilFinished;
 
             long seconds = millisUntilFinished/1000L;
-            txtComment.setText("Time left: " + DateUtils.formatElapsedTime(seconds));
+            txtElapsed.setText("Time left: " + DateUtils.formatElapsedTime(seconds));
             //if it has less than one minute left
             if (seconds<=(5*60)){
-                txtComment.setTextColor(Color.RED);
+                txtElapsed.setTextColor(Color.RED);
             }
 
             int minutes = (int)(seconds /60);
@@ -151,10 +156,31 @@ public class TestActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_test, menu);
 
-        //boolean paused = mTimer.isPaused();
-        //Log.d(TAG, "##### onCreateOptionsMenu / " + paused);
-        //menu.findItem(R.id.menu_resume).setVisible(paused);
-        //menu.findItem(R.id.menu_pause).setVisible(!paused);
+        /*
+         * Code when you are not using AppCompat
+        View count = menu.findItem(R.id.badge).getActionView();
+        notifCount = (Button) count.findViewById(R.id.notif_count);
+        notifCount.setText(String.valueOf(mNotifCount));
+        return super.onCreateOptionsMenu(menu);
+        */
+
+        //If you use AppCompat, you should set the ActionLayout in code :
+        // MenuItem item = menu.findItem(R.id.badge);
+        // MenuItemCompat.setActionView(item, R.layout.feed_update_count);
+        // notifCount = (Button) MenuItemCompat.getActionView(item);
+        //Use supportInvalidateOptionsMenu() need to use instead of invalidateOptionsMenu() if you target for API level below 11
+
+        int count = quizService.unAnswered();
+        MenuItem item = menu.findItem(R.id.badge);
+        MenuItemCompat.setActionView(item, R.layout.badge_count);
+        Button badgeCount = (Button) MenuItemCompat.getActionView(item);
+        badgeCount.setText(String.valueOf(count));
+        badgeCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertMissingQuestions();
+            }
+        });
 
         return true;
     }
@@ -164,9 +190,6 @@ public class TestActivity extends Activity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 confirmExit();
-                break;
-            case R.id.menu_list:
-                displayAsList();
                 break;
 //            case R.id.menu_pause:
 //                Log.d(TAG, "##### onOptionsItemSelected / menu_pause");
@@ -198,6 +221,11 @@ public class TestActivity extends Activity {
             case R.id.btnSubmit:
                 submitTest();
                 break;
+
+            case R.id.badgeCount:
+                alertMissingQuestions();
+                break;
+
         }
 
     }
@@ -224,7 +252,7 @@ public class TestActivity extends Activity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         txtTitle = (TextView)findViewById(android.R.id.text1);
-        txtComment = (TextView)findViewById(R.id.txtComment);
+        txtElapsed = (TextView)findViewById(R.id.txtElapsed);
 
         answerButtons = new RadioButton[3];
         answerButtons[0] = (RadioButton)findViewById(R.id.radioa);
@@ -245,12 +273,6 @@ public class TestActivity extends Activity {
         seekBar     = (SeekBar)findViewById(R.id.seekBar);
         seekBar.setOnSeekBarChangeListener(onSeekBarChangeListener);
 
-    }
-
-    private void displayAsList(){
-        //mTimer.pause();
-
-        //mTimer.resume();
     }
 
     private void confirmExit(){
@@ -276,7 +298,7 @@ public class TestActivity extends Activity {
         public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
             if (fromUser){
                 quizService.setPosition(position);
-                seekBar.setProgress(position);
+                //seekBar.setProgress(position);
             }
         }
 
@@ -306,40 +328,11 @@ public class TestActivity extends Activity {
             int selected = (Integer) button.getTag();
             quizService.selectAnswer(selected);
 
-//            if (txtTitle.getTag() == null || !(txtTitle.getTag() instanceof Question)) return;
-//            Question question = (Question)txtTitle.getTag();
-//            Log.d(TAG, "##### Question:" + question);
-//
-//            RadioButton button = (RadioButton)buttonView;
-//            if (button.getTag(R.string.key_answer) == null || !(button.getTag(R.string.key_answer) instanceof Answer)) return;
-//            Answer answer = (Answer)button.getTag(R.string.key_answer);
-//            Log.d(TAG, "##### Answer:" + answer);
-//
-//            int selected = (Integer)button.getTag(R.string.key_index);
-//            app.exam().setSelected(question, selected);
+            invalidateOptionsMenu();
+            updateAnswerState(q);
         }
     };
 
-    /*
-     *
-     */
-    private void checkAnswer(Question q){
-//        boolean correct = q.isCorrect();
-
-//        String html = "";
-//        btnNext.setEnabled(correct);
-//        if (correct) {
-//            html = "<p>Correct! </p>";
-//
-//            //if (quizService.isLast()) {
-//            //    btnNext.setVisibility(View.GONE);
-//            //}
-//        } else {
-//            html = "<p><font color='red'>Wrong! Try again.</font> </p>";
-//        }
-//
-//        txtComment.setText(Html.fromHtml(html));
-    }
 
     /*
      *
@@ -349,10 +342,8 @@ public class TestActivity extends Activity {
 
         Log.d(TAG, "##### displayQuestion / " + question);
 
-        setTitle("Question " + (quizService.getPosition() + 1) + " of " + quizService.total());
+        setTitle("Question " + question.id + " of " + quizService.total());
         txtTitle.setText(question.statement);
-        btnNext.setEnabled(false);
-        radioAnswer.clearCheck();
 
         seekBar.setProgress(quizService.getPosition());
 
@@ -370,10 +361,62 @@ public class TestActivity extends Activity {
             radioButton.setText(answer.answer);
         }
 
+        radioAnswer.clearCheck();
         if (question.selected>=0 && question.selected<question.answers.size()){
             answerButtons[question.selected].setChecked(true);
         }
+
+        updateAnswerState(question);
     }
+
+    /*
+     *
+     */
+    private void updateAnswerState(Question question){
+        //txtRemain.setText(quizService.unAnswered() + " missing");
+        Drawable drwable = getResources().getDrawable(question.answered() ? R.drawable.well : R.drawable.wellwarning);
+        txtTitle.setBackground(drwable);
+        radioAnswer.setBackground(drwable);
+    }
+
+    /*
+     *
+     */
+    private void alertMissingQuestions(){
+        final List<Question> missings = quizService.getMissingQuestions();
+        Log.d(TAG, "=============== alertMissingQuestions / " + missings.size());
+        if (missings.size() == 0) return;
+
+        mTimer.pause();
+        String[] result = new String[missings.size()];
+        for (int i=0, sz= missings.size(); i<sz; i++){
+            Question q = missings.get(i);
+            result[i] = q.id + ". " + q.statement;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.missing_questions)
+               .setItems(result, new DialogInterface.OnClickListener(){
+                   @Override
+                   public void onClick(DialogInterface dialog, int position) {
+                       Log.d(TAG, "-------- AlertDialog.Builder / DialogInterface.onClick : " + position);
+
+                       quizService.setPosition(missings.get(position));
+                       dialog.dismiss();
+
+                       mTimer.resume();
+                   }
+               })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        mTimer.resume();
+                    }
+                })
+                .create()
+                .show();
+    }
+
     /*
      *
      */

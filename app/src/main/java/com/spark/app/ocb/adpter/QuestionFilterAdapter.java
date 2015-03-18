@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -15,7 +16,6 @@ import com.spark.app.ocb.R;
 import com.spark.app.ocb.entity.Answer;
 import com.spark.app.ocb.entity.Question;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionFilterAdapter extends BaseAdapter {
@@ -23,29 +23,23 @@ public class QuestionFilterAdapter extends BaseAdapter {
     private static final String TAG = "QuestionFilterAdapter";
 
     Context mContext;
-    List<Question> mItems, mFiltered = null;
-    QuizViewFilter mFilter = null;
-    boolean mShowAsFilter = false;
+    List<Question> mItems;
+    boolean mShowAsList = false;
+    int mPosition = -1;
 
 	public QuestionFilterAdapter(Context context, List<Question> items) {
-        this(context, items, null);
-	}
-
-	public QuestionFilterAdapter(Context context, List<Question> items, QuizViewFilter<Question> filter) {
-        mContext = context;
-        mItems = items;
-        mFilter = filter;
-        mFiltered = applyFilter(filter);
+        this.mContext = context;
+        this.mItems = items;
 	}
 
     @Override
     public int getCount() {
-        return getListItems().size();
+        return mShowAsList ? mItems.size() : 1;
     }
 
     @Override
     public Question getItem(int position) {
-        return getListItems().get(position);
+        return mShowAsList ? mItems.get(position) : mItems.get(mPosition);
     }
 
     @Override
@@ -55,46 +49,53 @@ public class QuestionFilterAdapter extends BaseAdapter {
 
     public void setItems(List<Question> items){
         this.mItems = items;
-        this.mFiltered = applyFilter(mFilter);
-
-        if (mItems.size() != mFiltered.size())
-            notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
-    public void setFilter(QuizViewFilter<Question> filter){
-        mFilter = filter;
-        mFiltered = applyFilter(filter);
-
-        if (mItems.size() != mFiltered.size())
-            notifyDataSetChanged();
+    public boolean getShowAsList(){
+        return mShowAsList;
     }
 
-    public List<Question> applyFilter(QuizViewFilter<Question> filter){
-        if (filter == null) {
-            return mItems;
+    public void setShowAsList(boolean value){
+        mShowAsList = value;
+        notifyDataSetChanged();
+    }
+
+    public void toggleFiltered(){
+        setShowAsList(!mShowAsList);
+    }
+
+    public int getPosition(){
+        return mPosition;
+    }
+
+    public void setPosition(int position){
+        mPosition = position;
+        notifyDataSetChanged();
+    }
+
+    public void goToPrior(){
+        int pos = mPosition;
+        pos--;
+        if (pos < 0){
+            return;
         }
 
-        List<Question> result = new ArrayList<Question>();
+        setPosition(pos);
+    }
 
-        for (int i=0, sz=mItems.size(); i>sz; i++) {
-            Question q = mItems.get(i);
-            if (mFilter.filter(i, q)){
-                result.add(q);
-            }
+    public void goToNext(){
+        int pos = mPosition;
+        pos++;
+        if (pos > mItems.size()-1){
+            return;
         }
 
-        return result;
+        setPosition(pos);
     }
 
-    private List<Question> getListItems(){
-        return mShowAsFilter ? mFiltered : mItems;
-    }
-
-    public void setShowAsFilter(boolean value){
-        mShowAsFilter = value;
-
-        if (mItems.size() != mFiltered.size())
-            notifyDataSetChanged();
+    public boolean hasMore(){
+        return mPosition < mItems.size();
     }
 
 	/* (non-Javadoc)
@@ -107,41 +108,39 @@ public class QuestionFilterAdapter extends BaseAdapter {
 			convertView = inflater.inflate(R.layout.question_item, parent, false);
 		}
 
+        final Question item = getItem(position);
+        Log.d(TAG, "##### getItem / " + item);
+
         TextView txtTitle = (TextView)convertView.findViewById(android.R.id.text1);
+        txtTitle.setTextColor(Color.BLACK);
         txtTitle.setBackground(null);
-        txtTitle.setTextSize(13);
+        //txtTitle.setTextSize(13);
 
         RadioGroup radioAnswer = (RadioGroup)convertView.findViewById(R.id.radioAnswer);
         radioAnswer.setBackground(null);
+        radioAnswer.clearCheck();
 
-        RadioButton[] answerButtons = new RadioButton[3];
+        final RadioButton[] answerButtons = new RadioButton[3];
         answerButtons[0] = (RadioButton)convertView.findViewById(R.id.radioa);
         answerButtons[1] = (RadioButton)convertView.findViewById(R.id.radiob);
         answerButtons[2] = (RadioButton)convertView.findViewById(R.id.radioc);
 
-        txtTitle.setText("");
-        for (RadioButton b: answerButtons) {
-            b.setText("");
-        }
-
-        Question item = getItem(position);
-        Log.d(TAG, "##### getItem / " + item);
         if (item != null) {
-
+            for (RadioButton b: answerButtons) {
+                b.setText("");
+                b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (!isChecked || item == null) return;
+                        RadioButton button = (RadioButton) buttonView;
+                        item.selected = (Integer) button.getTag();
+                        answerButtons[item.selected].setChecked(true);
+                    }
+                });
+            }
 
             String title = item.id + ". " + item.statement;
-            if (item.isCorrect()) {
-                txtTitle.setText(title + " (O)");
-            }
-            else {
-                txtTitle.setText(title + " (X)");
-                txtTitle.setTextColor(Color.RED);
-            }
-
-            for (RadioButton b: answerButtons){
-                b.setEnabled(false);
-                b.setTextSize(11);
-            }
+            txtTitle.setText(title);
 
             List<Answer> answers = item.getAnswers();
 
@@ -152,21 +151,14 @@ public class QuestionFilterAdapter extends BaseAdapter {
             int i=0;
             for (Answer answer : answers){
                 if (i>=answerButtons.length) break;
-
                 RadioButton radioButton = answerButtons[i++];
-                //RadioButton rb = new RadioButton(mContext);
-                //radioAnswer.addView(rb, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
                 String s = answer.answer;
-                if (answer.correct)
-                    s += " (O)";
                 radioButton.setText(s);
             }
         }
 			
 		return convertView;
 	}
-	
 
     public static interface QuizViewFilter<T> {
         public boolean filter(int index, T t);

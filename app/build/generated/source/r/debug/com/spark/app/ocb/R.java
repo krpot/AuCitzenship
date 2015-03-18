@@ -15,17 +15,21 @@ public final class R {
         public static final int alertinfo=0x7f020001;
         public static final int alertsuccess=0x7f020002;
         public static final int alertwarning=0x7f020003;
-        public static final int btndanger=0x7f020004;
-        public static final int btndefault=0x7f020005;
-        public static final int btninfo=0x7f020006;
-        public static final int btnprimary=0x7f020007;
-        public static final int btnsuccess=0x7f020008;
-        public static final int btnwarning=0x7f020009;
-        public static final int ic_launcher=0x7f02000a;
-        public static final int well=0x7f02000b;
+        public static final int badgewarning=0x7f020004;
+        public static final int btndanger=0x7f020005;
+        public static final int btndefault=0x7f020006;
+        public static final int btninfo=0x7f020007;
+        public static final int btnprimary=0x7f020008;
+        public static final int btnsuccess=0x7f020009;
+        public static final int btnwarning=0x7f02000a;
+        public static final int ic_launcher=0x7f02000b;
+        public static final int well=0x7f02000c;
+        public static final int wellwarning=0x7f02000d;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f070000;
+        public static final int badge=0x7f07001e;
+        public static final int badgeCount=0x7f070017;
         public static final int btnAnothergo=0x7f07000b;
         public static final int btnBefore=0x7f070011;
         public static final int btnCancel=0x7f070014;
@@ -41,22 +45,20 @@ public final class R {
         public static final int btnTest=0x7f070004;
         public static final int container=0x7f070015;
         public static final int imageView=0x7f07000c;
-        public static final int listView=0x7f07001c;
-        public static final int menu_list=0x7f07001e;
         public static final int menu_pause=0x7f07001f;
         public static final int menu_resume=0x7f070020;
         public static final int menu_settings=0x7f07001d;
-        public static final int radioAnswer=0x7f070018;
-        public static final int radioa=0x7f070019;
-        public static final int radiob=0x7f07001a;
-        public static final int radioc=0x7f07001b;
-        public static final int seekBar=0x7f070010;
+        public static final int radioAnswer=0x7f070019;
+        public static final int radioa=0x7f07001a;
+        public static final int radiob=0x7f07001b;
+        public static final int radioc=0x7f07001c;
+        public static final int seekBar=0x7f07000f;
         public static final int spinner=0x7f07000d;
-        public static final int textView=0x7f07000f;
         public static final int textView2=0x7f070007;
         public static final int txtComment=0x7f070008;
+        public static final int txtElapsed=0x7f070010;
         public static final int txtIntro=0x7f07000e;
-        public static final int txtSummary=0x7f070017;
+        public static final int txtSummary=0x7f070018;
         public static final int webview=0x7f070016;
     }
     public static final class layout {
@@ -67,12 +69,11 @@ public final class R {
         public static final int activity_test_intro=0x7f030004;
         public static final int activity_test_result=0x7f030005;
         public static final int activity_textbook=0x7f030006;
-        public static final int fragment_result_review=0x7f030007;
-        public static final int fragment_result_summary=0x7f030008;
-        public static final int question_item=0x7f030009;
-        public static final int quiz_card_view=0x7f03000a;
-        public static final int quiz_list_view=0x7f03000b;
-        public static final int test_result_item=0x7f03000c;
+        public static final int badge_count=0x7f030007;
+        public static final int fragment_result_review=0x7f030008;
+        public static final int fragment_result_summary=0x7f030009;
+        public static final int question_item=0x7f03000a;
+        public static final int test_result_item=0x7f03000b;
     }
     public static final class menu {
         public static final int menu_main=0x7f060000;
@@ -97,22 +98,23 @@ public final class R {
         public static final int key_answer=0x7f04000f;
         public static final int key_index=0x7f040010;
         public static final int list=0x7f040011;
-        public static final int next=0x7f040012;
-        public static final int no_update=0x7f040013;
-        public static final int not_supported_yet=0x7f040014;
-        public static final int pause=0x7f040015;
-        public static final int practice=0x7f040016;
-        public static final int resume=0x7f040017;
-        public static final int review=0x7f040018;
-        public static final int settings=0x7f040019;
-        public static final int share=0x7f04001a;
-        public static final int start=0x7f04001b;
-        public static final int study=0x7f04001c;
-        public static final int submit=0x7f04001d;
-        public static final int test=0x7f04001e;
-        public static final int test_intro=0x7f04001f;
-        public static final int test_result=0x7f040020;
-        public static final int textbook=0x7f040021;
+        public static final int missing_questions=0x7f040012;
+        public static final int next=0x7f040013;
+        public static final int no_update=0x7f040014;
+        public static final int not_supported_yet=0x7f040015;
+        public static final int pause=0x7f040016;
+        public static final int practice=0x7f040017;
+        public static final int resume=0x7f040018;
+        public static final int review=0x7f040019;
+        public static final int settings=0x7f04001a;
+        public static final int share=0x7f04001b;
+        public static final int start=0x7f04001c;
+        public static final int study=0x7f04001d;
+        public static final int submit=0x7f04001e;
+        public static final int test=0x7f04001f;
+        public static final int test_intro=0x7f040020;
+        public static final int test_result=0x7f040021;
+        public static final int textbook=0x7f040022;
     }
     public static final class style {
         /** 

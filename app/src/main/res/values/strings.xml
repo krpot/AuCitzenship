@@ -25,12 +25,13 @@
     <string name="share">Share</string>
     <string name="textbook">Text Book</string>
 
-    <!-- Practice Activity -->
+    <!-- Practice/Test Activity -->
     <string name="before">Before</string>
     <string name="next">Next</string>
     <string name="another_go">Another go</string>
     <string name="finish">Finish</string>
     <string name="submit">Submit</string>
+    <string name="missing_questions">Missing questions</string>
 
     <string name="key_index">Index</string>
     <string name="key_answer">Answer</string>

@@ -23,6 +23,7 @@ import com.spark.app.ocb.util.BeanUtils;
 import com.spark.app.ocb.util.SysUtils;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.spark.app.ocb.MyApp.app;
@@ -102,6 +103,11 @@ public class QuizService {
         goTo(position);
     }
 
+    public void setPosition(Question question){
+        mPosition = mExam.questions.indexOf(question);
+        goTo(mPosition);
+    }
+
     /*
      *
      */
@@ -138,6 +144,21 @@ public class QuizService {
         }
 
         return unanswered;
+    }
+
+    public List<Question> getMissingQuestions(){
+        List<Question> result = new ArrayList<Question>();
+
+        for (Question question : mExam.questions){
+            if (question != null && question.selected<0)
+                result.add(question);
+        }
+
+        return result;
+    }
+
+    public List<Question> getQuestions(){
+        return mExam.questions;
     }
 
     public Question currentQuestion(){
